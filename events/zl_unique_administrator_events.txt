@@ -236,23 +236,22 @@ country_event = {
 
 				# ==========================================================
 				#  ★ 初始"行政官形态"配装
-				#  与 zl_switch_form_administrator 完全一致：
-				#      subclass 1 + basic 2 + veteran 3 + 形态 veteran 1
-				#      + destiny 1  =  8 个
-				#  每一类都在上限内，任命内阁不会被清理。
+				#  与 zl_switch_form_administrator 完全一致：7 个
+				#      subclass 1 + basic 2 + veteran 3 + destiny 1
+				#  每一类都在原版槽位上限内，任命内阁不会被清理。
+				#  除 destiny（本 mod 形态特质）外，其余全部是原版特质。
 				# ==========================================================
 				# 子职业（第 4 级的选择）
-				add_trait = { trait = subclass_official_governor       consume_selection = yes }
-				# basic ×2
-				add_trait = { trait = zl_leader_trait_gifted           consume_selection = yes }
-				add_trait = { trait = zl_leader_trait_resilient        consume_selection = yes }
-				# veteran ×3（通用）
-				add_trait = { trait = zl_leader_trait_veteran          consume_selection = yes }
-				add_trait = { trait = zl_leader_trait_veteran_2        consume_selection = yes }
-				# 形态 veteran（本职加成）
-				add_trait = { trait = zl_leader_trait_administrator_2  consume_selection = yes }
-				# destiny ×1（第 8 级的选择）
-				add_trait = { trait = zl_leader_trait_administrator    consume_selection = yes }
+				add_trait = { trait = subclass_official_governor                     consume_selection = yes }
+				# basic ×2（原版）
+				add_trait = { trait = leader_trait_gifted_2                          consume_selection = yes }
+				add_trait = { trait = leader_trait_intellectual                      consume_selection = yes }
+				# veteran ×3（原版）
+				add_trait = { trait = leader_trait_adventurous_spirit                consume_selection = yes }
+				add_trait = { trait = leader_trait_legendary_scientific_diplomacy_3  consume_selection = yes }
+				add_trait = { trait = leader_trait_legendary_military_knowledge_3    consume_selection = yes }
+				# destiny ×1（本 mod 形态特质，不朽 + 自定义图标）
+				add_trait = { trait = zl_leader_trait_administrator                  consume_selection = yes }
 
 				# ★ 补到 10 级。
 				#   不用逐级触发选择：add_skill_without_trait_selection

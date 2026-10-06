@@ -2,134 +2,53 @@
 #  大肥鱼 天枢执政 —— 自定义领袖特性
 #  Mod: zl_unique_administrator   (Stellaris Cetus v4.3.7)
 #
-#  ── ★★ 为什么必须严格守住槽位上限 ★★ ────────────────────────────────
+#  ── 只保留 3 个自定义特质（三个形态各一个）────────────────────────────
+#      zl_leader_trait_administrator   行政官形态
+#      zl_leader_trait_commander       指挥官形态
+#      zl_leader_trait_scientist       科学家形态
+#
+#  这三个是【不朽】特质，也是唯一使用自定义图标的特质（绿色 destiny 框）。
+#  其余普通特质一律改用【原版特质】，不再自绘图标。
+#
+#  ── ★★ 槽位上限必须守住 ★★ ──────────────────────────────────────────
 #  原版 common/defines/00_defines.txt：
 #      MAX_BASIC_TRAITS   = 2
 #      MAX_VETERAN_TRAITS = 3
-#  destiny 槽 1 个，subclass 槽 1 个。
+#  destiny 1 个、subclass 1 个。
 #
-#  ⚠ 实测踩坑：配装一旦超限（例如 veteran=4、destiny=3），
-#    把领袖【任命到内阁】时游戏会执行槽位清理 —— 超出的特质被移除，
-#    并且重新弹出"请选择特质"。所以超限【不能接受】。
+#  ⚠ 实测踩坑：配装超限（veteran=4 / destiny=3）时，
+#    把领袖【任命到内阁】会触发槽位清理 —— 超出的特质被移除，
+#    并重新弹出"请选择特质"。所以超限绝对不能接受。
 #
-#  但 10 级又要消耗 10 次选择（LEADER_TRAIT_SELECTION_LEVELS = 1..10）…
-#  解决办法：不给满 10 个特质，改用 add_skill_without_trait_selection
-#  直接把等级补到 10，从而绕开选择流程（见 effects 文件）。
-#
-#  ── 每个形态配装（7 个，符合全部上限）────────────────────────────────
+#  ── 每个形态的配装（7 个，全部落在上限内）────────────────────────────
 #      basic 2 + veteran 3 + destiny 1 + subclass 1 = 7
 #
-#  ── 设计原则 ──────────────────────────────────────────────────────────
-#  1) 不朽不靠寿命：特质带 immortal_leaders = yes（全局生效），
-#     全部【不含 leader_lifespan_add】。
-#  2) 不要经验加成：全部【不含 species_leader_exp_gain】。
-#  3) 只有行政官有治理定位：
+#  其中 destiny 用本 mod 的形态特质，其余用原版特质：
+#      basic   原版 leader_trait_gifted_2        天赋异禀 II（特质选项 +2）
+#      basic   原版 leader_trait_intellectual    知识分子（研究所产出 +10%）
+#      veteran 原版 leader_trait_adventurous_spirit      冒险精神（维护费 -10%）
+#      veteran 原版 leader_trait_legendary_scientific_diplomacy_3
+#                                                科学外交 III（科技外交权重 +20%、研究 +10%）
+#      veteran 原版 leader_trait_legendary_military_knowledge_3
+#                                                军事知识 III（指挥上限 +20、海军容量 +15%）
+#      destiny 本 mod 形态特质（不朽 + 本职加成）
+#      subclass 原版子职业（按形态取本职）
+#
+#  选这三条原版 veteran 的理由：
+#      · 三职业（official / commander / scientist）都可用
+#      · 不含 leader_lifespan_add（不朽不靠寿命）
+#      · 不含 species_leader_exp_gain（不要经验加成）
+#
+#  ── 形态特质的定位（只有行政官带治理加成）────────────────────────────
 #         行政官  modifier + planet_modifier + sector_modifier
 #         指挥官  modifier + fleet_modifier
 #         科学家  modifier
-#  4) COUNCIL = no（避免无职时显示灰色 X）
 # ============================================================================
 
 
 # ===========================================================================
-#  一、通用 basic ×2（三形态共用）
-# ===========================================================================
-zl_leader_trait_gifted = {
-	leader_trait_type = basic
-	randomized = no
-	notify_on_gained = yes
-	immortal_leaders = yes
-
-	inline_script = {
-		script = trait/icon
-		CLASS = leader
-		ICON = "GFX_leader_trait_zl_administrator"
-		RARITY = common
-		COUNCIL = no
-		TIER = 1
-	}
-
-	leader_class = { commander scientist official }
-
-	self_modifier = {
-		leaders_upkeep_mult = -0.25
-		leader_trait_selection_options_add = 2
-	}
-}
-
-zl_leader_trait_resilient = {
-	leader_trait_type = basic
-	randomized = no
-	notify_on_gained = yes
-	immortal_leaders = yes
-
-	inline_script = {
-		script = trait/icon
-		CLASS = leader
-		ICON = "GFX_leader_trait_zl_administrator"
-		RARITY = common
-		COUNCIL = no
-		TIER = 2
-	}
-
-	leader_class = { commander scientist official }
-
-	modifier = {
-		leaders_cost_mult = -0.50
-		country_leader_pool_size = 2
-	}
-}
-
-
-# ===========================================================================
-#  二、通用 veteran ×3（三形态共用）
-# ===========================================================================
-zl_leader_trait_veteran = {
-	leader_trait_type = veteran
-	randomized = no
-	notify_on_gained = yes
-
-	inline_script = {
-		script = trait/icon
-		CLASS = leader
-		ICON = "GFX_leader_trait_zl_administrator"
-		RARITY = veteran
-		COUNCIL = no
-		TIER = 1
-	}
-
-	leader_class = { commander scientist official }
-
-	modifier = {
-		country_leader_pool_size = 2
-		leaders_cost_mult = -0.25
-	}
-}
-
-zl_leader_trait_veteran_2 = {
-	leader_trait_type = veteran
-	randomized = no
-	notify_on_gained = yes
-
-	inline_script = {
-		script = trait/icon
-		CLASS = leader
-		ICON = "GFX_leader_trait_zl_administrator"
-		RARITY = veteran
-		COUNCIL = no
-		TIER = 2
-	}
-
-	leader_class = { commander scientist official }
-
-	modifier = {
-		country_unity_produces_mult = 0.10
-		country_influence_produces_mult = 0.10
-	}
-}
-
-# ===========================================================================
-#  三、形态 destiny ×3（每个形态各一个，互斥）
+#  形态 destiny ×3（每个形态各一个，互斥；三者都带 immortal_leaders）
+#  图标：自定义 29x29 BGRA8，GFX_leader_trait_zl_administrator
 # ===========================================================================
 zl_leader_trait_administrator = {
 	leader_trait_type = destiny
@@ -150,6 +69,7 @@ zl_leader_trait_administrator = {
 
 	modifier = {
 		country_influence_produces_mult = 0.15
+		country_unity_produces_mult = 0.10
 		country_edict_fund_add = 30
 		empire_size_add = -10
 	}
@@ -193,6 +113,8 @@ zl_leader_trait_commander = {
 		country_naval_cap_mult = 0.10
 	}
 
+	# 舰队类：只有本形态有；用 fleet_modifier 而非 modifier，
+	# 避免领袖被派去治理星球时舰队加成落到星球上。
 	fleet_modifier = {
 		ship_weapon_damage = 0.15
 		ship_hull_mult = 0.10
@@ -218,81 +140,8 @@ zl_leader_trait_scientist = {
 	leader_class = { scientist }
 
 	modifier = {
-		all_technology_research_speed = 0.10
 		science_ship_survey_speed = 0.25
 		ship_anomaly_research_speed_mult = 0.25
 		ship_archaeological_site_excavation_speed_mult = 0.25
-	}
-}
-
-
-# ===========================================================================
-#  四、形态 veteran ×3（每个形态各一个；每个形态只带 1 个，总数仍为 3）
-# ===========================================================================
-zl_leader_trait_administrator_2 = {
-	leader_trait_type = veteran
-	randomized = no
-	notify_on_gained = yes
-
-	inline_script = {
-		script = trait/icon
-		CLASS = official
-		ICON = "GFX_leader_trait_zl_administrator"
-		RARITY = veteran
-		COUNCIL = no
-		TIER = 3
-	}
-
-	leader_class = { official }
-
-	planet_modifier = {
-		planet_jobs_unity_produces_mult = 0.15
-		planet_stability_add = 5
-	}
-}
-
-zl_leader_trait_commander_2 = {
-	leader_trait_type = veteran
-	randomized = no
-	notify_on_gained = yes
-
-	inline_script = {
-		script = trait/icon
-		CLASS = commander
-		ICON = "GFX_leader_trait_zl_administrator"
-		RARITY = veteran
-		COUNCIL = no
-		TIER = 3
-	}
-
-	leader_class = { commander }
-
-	fleet_modifier = {
-		ship_fire_rate_mult = 0.15
-		ship_accuracy_add = 10
-		ship_tracking_add = 10
-	}
-}
-
-zl_leader_trait_scientist_2 = {
-	leader_trait_type = veteran
-	randomized = no
-	notify_on_gained = yes
-
-	inline_script = {
-		script = trait/icon
-		CLASS = scientist
-		ICON = "GFX_leader_trait_zl_administrator"
-		RARITY = veteran
-		COUNCIL = no
-		TIER = 3
-	}
-
-	leader_class = { scientist }
-
-	modifier = {
-		science_ship_survey_speed = 0.20
-		ship_anomaly_generation_chance_mult = 0.10
-		ship_sensor_range_add = 2
 	}
 }
