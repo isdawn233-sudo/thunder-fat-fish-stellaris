@@ -126,8 +126,12 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		# 诊断打点：确认联系人国与领袖是否真的建成了（看 error.log）
-		log = "ZLDBG: zl_leader.99 开始创建联系人国"
+		# ==============================================================
+		#  分步诊断打点
+		#  排查"闪退"用：每一步都写一行 game.log，
+		#  崩溃后看最后出现的是哪一行，就知道卡在第几步。
+		# ==============================================================
+		log = "ZLDBG: [99] STEP 1/9 - enter zl_leader.99"
 		create_country = {
 			name = "NAME_zl_deepseek_country"
 			type = zl_deepseek
@@ -148,11 +152,13 @@ country_event = {
 				}
 			}
 		}
+		log = "ZLDBG: [99] STEP 2/9 - create_country done"
 
 		last_created_country = {
 			# 与玩家建立通讯（不弹消息）—— 这一步让它进入联系人列表
 			establish_communications_no_message = root
 			save_global_event_target_as = zl_deepseek_country
+			log = "ZLDBG: [99] STEP 3/9 - comms established"
 
 			# ---- 给它一个绑定自定义静态立绘的物种 ----
 			# 通讯窗口（F10 点开联系人）显示的肖像是"对方国家的物种肖像"。
@@ -176,7 +182,9 @@ country_event = {
 					trait = "trait_mechanical"
 				}
 			}
+			log = "ZLDBG: [99] STEP 4/9 - create_species done"
 			change_species = last_created_species
+			log = "ZLDBG: [99] STEP 5/9 - change_species done"
 
 			# 记录这个物种，供领袖肖像引用
 			last_created_species = {
@@ -195,6 +203,7 @@ country_event = {
 		#
 		#  此时作用域 = root = 玩家。
 		# ==================================================================
+		log = "ZLDBG: [99] STEP 6/9 - about to create_leader"
 		create_leader = {
 			class = official
 			tier = leader_tier_legendary
@@ -224,6 +233,7 @@ country_event = {
 			custom_catch_phrase = zl_administrator_catch_phrase
 			custom_description = zl_administrator_desc
 			effect = {
+				log = "ZLDBG: [99] STEP 7/9 - leader created, in effect"
 				# 全局事件目标：读档后依然有效，形态切换菜单靠它找到领袖
 				save_global_event_target_as = zl_deepseek
 				set_leader_flag = zl_deepseek
@@ -231,32 +241,48 @@ country_event = {
 				set_leader_flag = leader_death_events_blocked
 				set_leader_flag = immune_to_negative_traits
 				set_immortal = yes
+				log = "ZLDBG: [99] STEP 8/9 - flags/immortal/portrait set"
 				# 自定义静态半身立绘
 				change_leader_portrait = zl_administrator
+				log = "ZLDBG: [99] STEP 8b/9 - portrait changed, adding traits"
 
 				# ==========================================================
-				#  ★ 初始"行政官形态"配装
-				#  与 zl_switch_form_administrator 完全一致：7 个
-				#      subclass 1 + basic 2 + veteran 3 + destiny 1
-				#  每一类都在原版槽位上限内，任命内阁不会被清理。
-				#  除 destiny（本 mod 形态特质）外，其余全部是原版特质。
+				#  ★ 初始"行政官形态"配装 —— 正好 10 个
+				#  与 zl_switch_form_administrator 完全一致：
+				#      subclass 4 + basic 2 + veteran 3 + destiny 1 = 10
+				#
+				#  为什么必须正好 10 个：
+				#      LEADER_TRAIT_SELECTION_LEVELS = { 1..10 }
+				#      → 10 级要消耗 10 次选择；
+				#      而 add_skill_without_trait_selection 只加等级、
+				#      不消耗选择机会。所以特质总数必须等于等级，
+				#      否则 UI 会一直弹"等级提升！请选择特质"。
+				#
+				#  subclass 在 defines 里没有上限，且不占 basic/veteran/destiny
+				#  额度，所以用 4 个原版子职业把数量补到 10，
+				#  同时不触发任何超限清理。
 				# ==========================================================
-				# 子职业（第 4 级的选择）
-				add_trait = { trait = subclass_official_governor                     consume_selection = yes }
+				# subclass ×4
+				add_trait = { trait = subclass_official_governor               consume_selection = yes }
+				add_trait = { trait = subclass_official_delegate               consume_selection = yes }
+				add_trait = { trait = subclass_official_economy_councilor      consume_selection = yes }
+				add_trait = { trait = subclass_official_diplomacy_councilor    consume_selection = yes }
 				# basic ×2（原版）
-				add_trait = { trait = leader_trait_gifted_2                          consume_selection = yes }
-				add_trait = { trait = leader_trait_intellectual                      consume_selection = yes }
+				add_trait = { trait = leader_trait_gifted_2                    consume_selection = yes }
+				add_trait = { trait = leader_trait_intellectual                consume_selection = yes }
 				# veteran ×3（原版）
-				add_trait = { trait = leader_trait_adventurous_spirit                consume_selection = yes }
+				add_trait = { trait = leader_trait_adventurous_spirit          consume_selection = yes }
 				add_trait = { trait = leader_trait_legendary_scientific_diplomacy_3  consume_selection = yes }
 				add_trait = { trait = leader_trait_legendary_military_knowledge_3    consume_selection = yes }
 				# destiny ×1（本 mod 形态特质，不朽 + 自定义图标）
-				add_trait = { trait = zl_leader_trait_administrator                  consume_selection = yes }
+				add_trait = { trait = zl_leader_trait_administrator            consume_selection = yes }
+				log = "ZLDBG: [99] STEP 8c/9 - traits added"
 
 				# ★ 补到 10 级。
 				#   不用逐级触发选择：add_skill_without_trait_selection
 				#   直接加等级且不弹特质选择。
 				add_skill_without_trait_selection = 9
+				log = "ZLDBG: [99] STEP 9/9 - DONE, skill set to 10"
 			}
 		}
 	}

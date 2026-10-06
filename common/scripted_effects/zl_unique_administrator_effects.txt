@@ -9,29 +9,40 @@
 #
 #  领袖本体的生成在 events 里完成（见 zl_leader.99）。
 #
-#  ── ★★ 配装设计 ★★ ──────────────────────────────────────────────────
-#  本 mod 只保留 3 个自定义特质（三个形态各一个，不朽 + 自定义图标）。
-#  其余【全部使用原版特质】。
+#  ── ★★★ 为什么每个形态正好 10 个特质 ★★★ ──────────────────────────────
+#  原版 common/defines/00_defines.txt：
+#      LEADER_TRAIT_SELECTION_LEVELS = { 1 2 3 4 5 6 7 8 9 10 }
+#      LEADER_SUBCLASS_CHOICE_LEVEL  = 4
+#  → 10 级领袖要消耗 10 次"特质选择"。
 #
-#  每个形态 7 个，全部落在原版槽位上限内：
-#      basic    2  +  veteran 3  +  destiny 1  +  subclass 1  =  7
+#  ⚠ 关键：add_skill_without_trait_selection【只加等级，不消耗选择机会】。
+#    原版给自己新领袖初始化时就是这么写的（events/leader_events_2.txt:569
+#    的 leader.200），所以原版新领袖照样有待选特质 —— 那是设计意图。
+#    => 想要【零待选】，唯一办法是【特质总数 == 等级】。
+#       原版 Chosen 领袖就是 8 级配 8 个特质
+#       （common/scripted_effects/shroud_shadows_scripted_effects.txt）。
 #
-#  ⚠ 为什么必须守上限（实测）：
-#     配装超限（例如 veteran=4、destiny=3）时，把领袖【任命到内阁】
-#     会触发槽位清理 —— 超出的特质被移除，并重新弹出"请选择特质"。
+#  ── 又必须守住槽位上限 ────────────────────────────────────────────────
+#      MAX_BASIC_TRAITS   = 2
+#      MAX_VETERAN_TRAITS = 3
+#      destiny 1 个
+#  （subclass 在 defines 里【没有上限定义】）
 #
-#  ⚠ 与"10 级要消耗 10 次选择"的冲突：
-#     原版 LEADER_TRAIT_SELECTION_LEVELS = { 1..10 }，
-#     但上限只允许 7 个特质。
-#     解法：只给 7 个特质，等级用 add_skill_without_trait_selection
-#     从 1 级直接补到 10 级（见 events 里的 create_leader）。
+#  于是凑法：
+#      basic 2 + veteran 3 + destiny 1 + subclass 4  =  10
+#  subclass 不占 basic/veteran/destiny 的额度，
+#  所以既满足"10 个"，又不会触发任何超限清理。
 #
-#  ── 选用的原版特质（三职业都可用 / 无寿命 / 无经验）──────────────────
-#      leader_trait_gifted_2                          天赋异禀 II
-#      leader_trait_intellectual                      知识分子
-#      leader_trait_adventurous_spirit                冒险精神
-#      leader_trait_legendary_scientific_diplomacy_3  科学外交 III
-#      leader_trait_legendary_military_knowledge_3    军事知识 III
+#  原版每个职业正好有 4 个 subclass，全部拿来用：
+#      official   governor / delegate / economy_councilor / diplomacy_councilor
+#      commander  admiral / general / governor / councilor
+#      scientist  scholar / explorer / governor / councilor
+#
+#  ── 设计原则 ──────────────────────────────────────────────────────────
+#  1) 不朽不靠寿命：形态特质带 immortal_leaders = yes（全局生效）
+#  2) 不要经验加成：全部特质不含 species_leader_exp_gain
+#  3) 只有行政官有治理定位（用 planet_modifier / sector_modifier），
+#     指挥官用 fleet_modifier，科学家用 modifier
 # ============================================================================
 
 
@@ -45,18 +56,26 @@ zl_clear_forms_effect = {
 	remove_trait = zl_leader_trait_commander
 	remove_trait = zl_leader_trait_scientist
 
-	# ── 原版配装（basic ×2）──────────────────────────────────────────
+	# ── 原版 basic ×2 ────────────────────────────────────────────────
 	remove_trait = leader_trait_gifted_2
 	remove_trait = leader_trait_intellectual
-	# ── 原版配装（veteran ×3）────────────────────────────────────────
+	# ── 原版 veteran ×3 ─────────────────────────────────────────────
 	remove_trait = leader_trait_adventurous_spirit
 	remove_trait = leader_trait_legendary_scientific_diplomacy_3
 	remove_trait = leader_trait_legendary_military_knowledge_3
-
-	# ── 三个子职业 ──────────────────────────────────────────────────
+	# ── 原版 subclass ×4（三职业各 4 个，全列出来一起清）──────────────
 	remove_trait = subclass_official_governor
+	remove_trait = subclass_official_delegate
+	remove_trait = subclass_official_economy_councilor
+	remove_trait = subclass_official_diplomacy_councilor
 	remove_trait = subclass_commander_admiral
+	remove_trait = subclass_commander_general
+	remove_trait = subclass_commander_governor
+	remove_trait = subclass_commander_councilor
 	remove_trait = subclass_scientist_scholar
+	remove_trait = subclass_scientist_explorer
+	remove_trait = subclass_scientist_governor
+	remove_trait = subclass_scientist_councilor
 
 	# 三个形态标志位
 	remove_leader_flag = zl_form_administrator
@@ -67,24 +86,27 @@ zl_clear_forms_effect = {
 
 # ---------------------------------------------------------------------------
 #  行政官形态 —— 唯一带治理定位的形态
-#  7 个：subclass 1 + basic 2 + veteran 3 + destiny 1
+#  10 个：subclass 4 + basic 2 + veteran 3 + destiny 1
 # ---------------------------------------------------------------------------
 zl_switch_form_administrator = {
 	event_target:zl_deepseek = {
 		zl_clear_forms_effect = yes
 		change_leader_class = official
 
-		# 子职业（第 4 级的选择）
-		add_trait = { trait = subclass_official_governor                     consume_selection = yes }
-		# basic ×2（原版）
-		add_trait = { trait = leader_trait_gifted_2                          consume_selection = yes }
-		add_trait = { trait = leader_trait_intellectual                      consume_selection = yes }
-		# veteran ×3（原版）
-		add_trait = { trait = leader_trait_adventurous_spirit                consume_selection = yes }
+		# subclass ×4（第 4 级的选择；原版每个职业正好 4 个）
+		add_trait = { trait = subclass_official_governor               consume_selection = yes }
+		add_trait = { trait = subclass_official_delegate               consume_selection = yes }
+		add_trait = { trait = subclass_official_economy_councilor      consume_selection = yes }
+		add_trait = { trait = subclass_official_diplomacy_councilor    consume_selection = yes }
+		# basic ×2
+		add_trait = { trait = leader_trait_gifted_2                    consume_selection = yes }
+		add_trait = { trait = leader_trait_intellectual                consume_selection = yes }
+		# veteran ×3
+		add_trait = { trait = leader_trait_adventurous_spirit          consume_selection = yes }
 		add_trait = { trait = leader_trait_legendary_scientific_diplomacy_3  consume_selection = yes }
 		add_trait = { trait = leader_trait_legendary_military_knowledge_3    consume_selection = yes }
 		# destiny ×1（本 mod 形态特质，不朽）
-		add_trait = { trait = zl_leader_trait_administrator                  consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_administrator            consume_selection = yes }
 
 		set_leader_flag = zl_form_administrator
 	}
@@ -99,13 +121,16 @@ zl_switch_form_commander = {
 		zl_clear_forms_effect = yes
 		change_leader_class = commander
 
-		add_trait = { trait = subclass_commander_admiral                     consume_selection = yes }
-		add_trait = { trait = leader_trait_gifted_2                          consume_selection = yes }
-		add_trait = { trait = leader_trait_intellectual                      consume_selection = yes }
-		add_trait = { trait = leader_trait_adventurous_spirit                consume_selection = yes }
+		add_trait = { trait = subclass_commander_admiral               consume_selection = yes }
+		add_trait = { trait = subclass_commander_general               consume_selection = yes }
+		add_trait = { trait = subclass_commander_governor              consume_selection = yes }
+		add_trait = { trait = subclass_commander_councilor             consume_selection = yes }
+		add_trait = { trait = leader_trait_gifted_2                    consume_selection = yes }
+		add_trait = { trait = leader_trait_intellectual                consume_selection = yes }
+		add_trait = { trait = leader_trait_adventurous_spirit          consume_selection = yes }
 		add_trait = { trait = leader_trait_legendary_scientific_diplomacy_3  consume_selection = yes }
 		add_trait = { trait = leader_trait_legendary_military_knowledge_3    consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_commander                      consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_commander                consume_selection = yes }
 
 		set_leader_flag = zl_form_commander
 	}
@@ -120,13 +145,16 @@ zl_switch_form_scientist = {
 		zl_clear_forms_effect = yes
 		change_leader_class = scientist
 
-		add_trait = { trait = subclass_scientist_scholar                     consume_selection = yes }
-		add_trait = { trait = leader_trait_gifted_2                          consume_selection = yes }
-		add_trait = { trait = leader_trait_intellectual                      consume_selection = yes }
-		add_trait = { trait = leader_trait_adventurous_spirit                consume_selection = yes }
+		add_trait = { trait = subclass_scientist_scholar               consume_selection = yes }
+		add_trait = { trait = subclass_scientist_explorer              consume_selection = yes }
+		add_trait = { trait = subclass_scientist_governor              consume_selection = yes }
+		add_trait = { trait = subclass_scientist_councilor             consume_selection = yes }
+		add_trait = { trait = leader_trait_gifted_2                    consume_selection = yes }
+		add_trait = { trait = leader_trait_intellectual                consume_selection = yes }
+		add_trait = { trait = leader_trait_adventurous_spirit          consume_selection = yes }
 		add_trait = { trait = leader_trait_legendary_scientific_diplomacy_3  consume_selection = yes }
 		add_trait = { trait = leader_trait_legendary_military_knowledge_3    consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_scientist                      consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_scientist                consume_selection = yes }
 
 		set_leader_flag = zl_form_scientist
 	}
