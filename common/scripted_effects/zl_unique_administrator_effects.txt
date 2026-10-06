@@ -1,5 +1,5 @@
 # ============================================================================
-#  天枢执政 —— 形态切换脚本化效果
+#  大肥鱼 天枢执政 —— 形态切换脚本化效果
 #  Mod: zl_unique_administrator
 #  Stellaris Cetus v4.3.7
 #
@@ -9,33 +9,27 @@
 #
 #  领袖本体的生成在 events 里完成（见 zl_leader.99）。
 #
-#  ── ★★ 核心：consume_selection = yes ★★ ──────────────────────────────
-#  原版 defines/00_defines.txt：
-#      LEADER_TRAIT_SELECTION_LEVELS = { 1 2 3 4 5 6 7 8 9 10 }
-#      LEADER_SUBCLASS_CHOICE_LEVEL  = 4
-#      LEADER_DESTINY_CHOICE_LEVEL   = 8
-#  → 10 级领袖需要消耗 10 次"特质选择"，
-#    否则 UI 一直提示"等级提升！请选择特质"。
+#  ── ★★ 为什么配装只有 7 个特质 ★★ ────────────────────────────────────
+#  原版 caps（common/defines/00_defines.txt）：
+#      MAX_BASIC_TRAITS   = 2
+#      MAX_VETERAN_TRAITS = 3
+#  destiny 1 个、subclass 1 个。
 #
-#  原版范例 common/scripted_effects/shroud_shadows_scripted_effects.txt
-#  的 shroud_leader_creator 宏：
-#      create_leader = { skill = $LEVEL$ ... }        # LEVEL = 8
-#      last_created_leader = {
-#          add_trait = { trait = subclass_official_governor consume_selection = yes }
-#          add_trait = { trait = leader_trait_intellectual   consume_selection = yes }
-#          ... 正好 8 个，每个都带 consume_selection = yes
-#      }
-#  → 【每个 consume_selection = yes 消耗 1 次选择机会】。
+#  ⚠ 实测踩坑：配装超限（veteran=4 / destiny=3）时，
+#    把领袖【任命到内阁】会触发槽位清理 —— 超出的特质被移除，
+#    并重新弹出"请选择特质"。所以超限绝对不能接受。
 #
-#  所以这里每个形态给满 10 个特质，全部带 consume_selection = yes：
-#      subclass 1 + 通用 basic 2 + 形态 veteran 3
-#      + 通用 destiny 2 + 形态 destiny 1 = 9
-#      （第 10 个由形态 veteran 的第 3 个补足，见下）
+#  这与"10 级需要 10 次特质选择"冲突，解决方式：
+#      只给 7 个特质（守住上限），
+#      再用 add_skill_without_trait_selection 把等级补到 10。
+#
+#  配装构成（每个形态）：
+#      通用 basic 2 + 通用 veteran 3 + 形态 veteran 1 + 形态 destiny 1
+#      + 子职业（原版）1  =  8 个特质
 #
 #  ── 设计原则 ──────────────────────────────────────────────────────────
-#  1) 不朽不靠寿命：形态特质带 immortal_leaders = yes（全局生效），
-#     不加任何 leader_lifespan_add。
-#  2) 不要经验加成：不含 species_leader_exp_gain。
+#  1) 不朽不靠寿命：形态特质带 immortal_leaders = yes（全局生效）
+#  2) 不要经验加成：不含 species_leader_exp_gain
 #  3) 只有行政官有治理定位：
 #         行政官  modifier + planet_modifier + sector_modifier
 #         指挥官  modifier + fleet_modifier
@@ -51,24 +45,16 @@ zl_clear_forms_effect = {
 	remove_trait = zl_leader_trait_administrator
 	remove_trait = zl_leader_trait_commander
 	remove_trait = zl_leader_trait_scientist
-	# ── 形态 veteran ×6 ─────────────────────────────────────────────
+	# ── 形态 veteran ×3 ─────────────────────────────────────────────
 	remove_trait = zl_leader_trait_administrator_2
 	remove_trait = zl_leader_trait_commander_2
 	remove_trait = zl_leader_trait_scientist_2
-	remove_trait = zl_leader_trait_administrator_3
-	remove_trait = zl_leader_trait_commander_3
-	remove_trait = zl_leader_trait_scientist_3
-	remove_trait = zl_leader_trait_administrator_4
-	remove_trait = zl_leader_trait_commander_4
-	remove_trait = zl_leader_trait_scientist_4
 	# ── 通用 basic ×2 ───────────────────────────────────────────────
 	remove_trait = zl_leader_trait_gifted
 	remove_trait = zl_leader_trait_resilient
-	# ── 通用 destiny ×2 ─────────────────────────────────────────────
-	remove_trait = zl_leader_trait_visionary
-	remove_trait = zl_leader_trait_paragon
+	# ── 通用 veteran ×3 ─────────────────────────────────────────────
 	remove_trait = zl_leader_trait_veteran
-
+	remove_trait = zl_leader_trait_veteran_2
 	# ── 三个子职业 ──────────────────────────────────────────────────
 	remove_trait = subclass_official_governor
 	remove_trait = subclass_commander_admiral
@@ -83,29 +69,25 @@ zl_clear_forms_effect = {
 
 # ---------------------------------------------------------------------------
 #  行政官形态 —— 唯一带治理定位的形态
-#  10 个特质，全部 consume_selection = yes
+#  8 个特质：subclass 1 + basic 2 + veteran 3 + destiny 1 + 形态 veteran 1
 # ---------------------------------------------------------------------------
 zl_switch_form_administrator = {
 	event_target:zl_deepseek = {
 		zl_clear_forms_effect = yes
 		change_leader_class = official
 
-		# 1 子职业（第 4 级的选择）
-		add_trait = { trait = subclass_official_governor       consume_selection = yes }
-		# 2 通用 basic（第 1~2 级的选择）
-		add_trait = { trait = zl_leader_trait_gifted           consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_resilient        consume_selection = yes }
-		# 3 形态 veteran
-		add_trait = { trait = zl_leader_trait_administrator_2  consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_administrator_3  consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_administrator_4  consume_selection = yes }
-		# 2 通用 destiny（第 8 级及以上的选择）
-		add_trait = { trait = zl_leader_trait_visionary        consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_paragon          consume_selection = yes }
-		# 共享 veteran（第 10 个，凑满 10 次选择机会）
-		add_trait = { trait = zl_leader_trait_veteran          consume_selection = yes }
-		# 形态 destiny
-		add_trait = { trait = zl_leader_trait_administrator    consume_selection = yes }
+		# 子职业（第 4 级的选择）
+		add_trait = { trait = subclass_official_governor  consume_selection = yes }
+		# basic ×2
+		add_trait = { trait = zl_leader_trait_gifted      consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_resilient   consume_selection = yes }
+		# veteran ×3（通用）
+		add_trait = { trait = zl_leader_trait_veteran     consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_veteran_2   consume_selection = yes }
+		# 形态 veteran（本职加成）
+		add_trait = { trait = zl_leader_trait_administrator_2 consume_selection = yes }
+		# destiny ×1（第 8 级的选择）
+		add_trait = { trait = zl_leader_trait_administrator   consume_selection = yes }
 
 		set_leader_flag = zl_form_administrator
 	}
@@ -120,16 +102,13 @@ zl_switch_form_commander = {
 		zl_clear_forms_effect = yes
 		change_leader_class = commander
 
-		add_trait = { trait = subclass_commander_admiral       consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_gifted           consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_resilient        consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_commander_2      consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_commander_3      consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_commander_4      consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_visionary        consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_paragon          consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_veteran          consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_commander        consume_selection = yes }
+		add_trait = { trait = subclass_commander_admiral   consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_gifted       consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_resilient    consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_veteran      consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_veteran_2    consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_commander_2  consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_commander    consume_selection = yes }
 
 		set_leader_flag = zl_form_commander
 	}
@@ -144,16 +123,13 @@ zl_switch_form_scientist = {
 		zl_clear_forms_effect = yes
 		change_leader_class = scientist
 
-		add_trait = { trait = subclass_scientist_scholar      consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_gifted           consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_resilient        consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_scientist_2      consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_scientist_3      consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_scientist_4      consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_visionary        consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_paragon          consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_veteran          consume_selection = yes }
-		add_trait = { trait = zl_leader_trait_scientist        consume_selection = yes }
+		add_trait = { trait = subclass_scientist_scholar  consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_gifted      consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_resilient   consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_veteran     consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_veteran_2   consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_scientist_2 consume_selection = yes }
+		add_trait = { trait = zl_leader_trait_scientist   consume_selection = yes }
 
 		set_leader_flag = zl_form_scientist
 	}

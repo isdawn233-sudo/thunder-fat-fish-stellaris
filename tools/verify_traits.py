@@ -143,10 +143,8 @@ for form in ("administrator", "commander", "scientist"):
     print("  %s:" % form)
     for d in detail:
         print("     " + d)
-    # 说明：这里的槽位上限只约束"升级时还能选什么"。
-    # 通过 add_trait 显式给特质时可以超上限 —— 原版自己也这么做，
-    # 例如 shroud_events.txt 的 Chosen 领袖是 8 级 8 特质，其中 basic=3（超 2）。
-    # 真正要保证的是【特质总数 == 等级】，否则 UI 会提示「请选择特质」。
+    # 槽位上限必须守住：一旦超限，把领袖任命到内阁时游戏会清理超出的特质，
+    # 并重新弹出"请选择特质"（实测踩过这个坑）。
     over = []
     if cnt["basic"] > 2:
         over.append("basic %d>2" % cnt["basic"])
@@ -154,13 +152,9 @@ for form in ("administrator", "commander", "scientist"):
         over.append("veteran %d>3" % cnt["veteran"])
     if cnt["destiny"] > 1:
         over.append("destiny %d>1" % cnt["destiny"])
-    print("     小计 basic=%d/2 veteran=%d/3 destiny=%d/1 subclass=%d  共 %d 个"
-          % (cnt["basic"], cnt["veteran"], cnt["destiny"], cnt["subclass"], len(keys)))
-    if over:
-        print("     注: 超出常规槽位（%s）—— 显式给特质时属正常，"
-              "原版 Chosen 领袖同样超限" % ", ".join(over))
-    print("     关键: 特质总数 %d 个，对应 %s"
-          % (len(keys), "10 级所需，OK" if len(keys) == 10 else "!! 与 10 级不匹配"))
+    print("     小计 basic=%d/2 veteran=%d/3 destiny=%d/1 subclass=%d  共 %d 个  -> %s"
+          % (cnt["basic"], cnt["veteran"], cnt["destiny"], cnt["subclass"], len(keys),
+             "OK 全部在槽位上限内" if not over else "!! 超限：" + ", ".join(over)))
 
 # 4) 检查事件里的初始 traits 块
 ev = open(os.path.join(MOD, "events", "zl_unique_administrator_events.txt"),

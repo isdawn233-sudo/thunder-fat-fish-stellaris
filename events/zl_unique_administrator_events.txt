@@ -201,24 +201,20 @@ country_event = {
 			species = root.owner_main_species
 			name = "NAME_zl_administrator"
 			gender = indeterminable
-			# ★ 这里【故意】建在 1 级、且不给任何特质。
+			# ★ 建在 1 级，随后在 effect 里逐个挂特质，最后补到 10 级。
 			#
-			#   原因（原版 defines/00_defines.txt）：
-			#       LEADER_TRAIT_SELECTION_LEVELS = { 1 2 3 4 5 6 7 8 9 10 }
-			#   → 10 级需要消耗 10 次"特质选择"。
-			#   而在 create_leader 的 traits 块里给特质【不消耗选择机会】，
-			#   所以那些写法都会留下"待选特质"提示。
+			#   两条互相冲突的规则要同时满足：
+			#     (a) 原版 caps（00_defines.txt）：
+			#             MAX_BASIC_TRAITS = 2 / MAX_VETERAN_TRAITS = 3
+			#             destiny 1 / subclass 1
+			#         【超限会在任命内阁时被清理】—— 超出的特质被移除，
+			#         并且重新弹出"请选择特质"（实测踩过）。
+			#     (b) LEADER_TRAIT_SELECTION_LEVELS = { 1..10 }
+			#         → 10 级要消耗 10 次选择。
 			#
-			#   原版标准做法见
-			#   common/scripted_effects/shroud_shadows_scripted_effects.txt
-			#   的 shroud_leader_creator 宏：
-			#       create_leader = { skill = $LEVEL$ }        # 先建
-			#       last_created_leader = {
-			#           add_trait = { trait = X consume_selection = yes }
-			#           ... 正好 $LEVEL$ 个
-			#       }
-			#   即【建领袖】和【逐个消耗选择机会地加特质】分成两步。
-			#   本事件在 effect 里做第二步（见下），并补齐到 10 个。
+			#   所以配装只给 7 个（守上限），
+			#   再用 add_skill_without_trait_selection 直接补到 10 级，
+			#   绕开"每级一次选择"的流程。
 			skill = 1
 			event_leader = yes
 			skip_background_generation = yes
@@ -240,30 +236,27 @@ country_event = {
 
 				# ==========================================================
 				#  ★ 初始"行政官形态"配装
-				#  10 个特质，每个都带 consume_selection = yes，
-				#  正好吃掉 10 级所需的 10 次选择机会 →
-				#  打开领袖面板不会再有"等级提升！请选择特质"。
-				#  与 zl_switch_form_administrator 完全一致。
+				#  与 zl_switch_form_administrator 完全一致：
+				#      subclass 1 + basic 2 + veteran 3 + 形态 veteran 1
+				#      + destiny 1  =  8 个
+				#  每一类都在上限内，任命内阁不会被清理。
 				# ==========================================================
-				# 1 子职业（第 4 级的选择）
+				# 子职业（第 4 级的选择）
 				add_trait = { trait = subclass_official_governor       consume_selection = yes }
-				# 2 通用 basic
+				# basic ×2
 				add_trait = { trait = zl_leader_trait_gifted           consume_selection = yes }
 				add_trait = { trait = zl_leader_trait_resilient        consume_selection = yes }
-				# 2 形态 veteran
-				add_trait = { trait = zl_leader_trait_administrator_2  consume_selection = yes }
-				add_trait = { trait = zl_leader_trait_administrator_3  consume_selection = yes }
-				add_trait = { trait = zl_leader_trait_administrator_4  consume_selection = yes }
-				# 2 通用 destiny
-				add_trait = { trait = zl_leader_trait_visionary        consume_selection = yes }
-				add_trait = { trait = zl_leader_trait_paragon          consume_selection = yes }
-				# 共享 veteran（第 10 个，凑满 10 次选择机会）
+				# veteran ×3（通用）
 				add_trait = { trait = zl_leader_trait_veteran          consume_selection = yes }
-				# 1 形态 destiny
+				add_trait = { trait = zl_leader_trait_veteran_2        consume_selection = yes }
+				# 形态 veteran（本职加成）
+				add_trait = { trait = zl_leader_trait_administrator_2  consume_selection = yes }
+				# destiny ×1（第 8 级的选择）
 				add_trait = { trait = zl_leader_trait_administrator    consume_selection = yes }
 
-				# ★ 升到 10 级。用 add_skill_without_trait_selection
-				#   避免升级本身再触发一次选择（选择机会已由上面 10 个吃掉）。
+				# ★ 补到 10 级。
+				#   不用逐级触发选择：add_skill_without_trait_selection
+				#   直接加等级且不弹特质选择。
 				add_skill_without_trait_selection = 9
 			}
 		}

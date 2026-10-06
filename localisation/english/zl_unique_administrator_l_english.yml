@@ -5,12 +5,15 @@
  #
  #  NOTE: localisation files MUST have a UTF-8 BOM.
  #
- #  Trait composition (10 per form, matching skill level 10):
- #      subclass 1 + shared basic 2 + form veteran 3
- #      + shared destiny 2 + form destiny 1
- #  Why exactly 10: vanilla LEADER_TRAIT_SELECTION_LEVELS = { 1..10 },
- #  so a level-10 leader must consume 10 trait selections or the UI
- #  keeps prompting "please choose a trait".
+ #  Trait composition (8 per form):
+ #      subclass 1 + shared basic 2 + shared veteran 3
+ #      + form veteran 1 + form destiny 1
+ #
+ #  Why not 10: vanilla caps are MAX_BASIC_TRAITS=2 / MAX_VETERAN_TRAITS=3,
+ #  destiny 1, subclass 1. Exceeding them causes the game to strip the
+ #  surplus traits (and re-prompt for trait selection) when the leader is
+ #  appointed to the council. Skill 10 is reached via
+ #  add_skill_without_trait_selection instead.
  # ===========================================================================
 
  # ---- Leader name ----
@@ -25,7 +28,7 @@
  zl_administrator_catch_phrase:0 "\"Order is not a cage. It is the hull that lets a civilisation sail.\""
 
  # ===========================================================================
- #  Shared traits (all three forms)
+ #  Shared basic x2
  # ===========================================================================
  zl_leader_trait_gifted:0 "Gifted"
  zl_leader_trait_gifted_desc:0 "It learns so fast that colleagues question their own careers."
@@ -33,14 +36,15 @@
  zl_leader_trait_resilient:0 "Resilient"
  zl_leader_trait_resilient_desc:0 "Recruiting and maintaining it costs almost nothing - it is its own cheapest employee."
 
- zl_leader_trait_visionary:0 "Visionary"
- zl_leader_trait_visionary_desc:0 "While others are still arguing, it has already computed the next step."
-
- zl_leader_trait_paragon:0 "Legendary Paragon"
- zl_leader_trait_paragon_desc:0 "The empire's whole administrative machine runs lighter because it exists."
-
+ # ===========================================================================
+ #  Shared veteran x3
+ # ===========================================================================
  zl_leader_trait_veteran:0 "Pillar of the Empire"
  zl_leader_trait_veteran_desc:0 "It is the one beam in the whole administration that never snaps."
+
+ zl_leader_trait_veteran_2:0 "Far-Sighted"
+ zl_leader_trait_veteran_2_desc:0 "While others are still arguing, it has already computed the next step."
+
 
  # ===========================================================================
  #  Administrator form (the only one with governance bonuses)
@@ -48,14 +52,8 @@
  zl_leader_trait_administrator:0 "Big Fat Fish"
  zl_leader_trait_administrator_desc:0 "A legendary administrator calling itself the Big Fat Fish: its decrees reach every ledger, dockyard and laboratory in the empire."
 
- zl_leader_trait_administrator_2:0 "Celestial Reckoning"
- zl_leader_trait_administrator_2_desc:0 "It balances every ledger of the empire to the ninth decimal place."
-
- zl_leader_trait_administrator_3:0 "Deep Governance"
- zl_leader_trait_administrator_3_desc:0 "On any world it governs, crime drops into the statistical noise within a quarter."
-
- zl_leader_trait_administrator_4:0 "Ironclad Paperwork"
- zl_leader_trait_administrator_4_desc:0 "Nothing it signs ever needs redoing."
+ zl_leader_trait_administrator_2:0 "Deep Governance"
+ zl_leader_trait_administrator_2_desc:0 "On any world it governs, crime drops into the statistical noise within a quarter."
 
  # ===========================================================================
  #  Commander form (no governance bonuses)
@@ -66,12 +64,6 @@
  zl_leader_trait_commander_2:0 "Pod Resonance"
  zl_leader_trait_commander_2_desc:0 "Fire solutions for ten thousand ships resolve simultaneously inside its mind."
 
- zl_leader_trait_commander_3:0 "Deep-Space Evasion"
- zl_leader_trait_commander_3_desc:0 "It knows where the next shell will land 0.4 seconds before the enemy fire control does."
-
- zl_leader_trait_commander_4:0 "Over-Horizon Suppression"
- zl_leader_trait_commander_4_desc:0 "It has the fleet firing before the enemy is even in range."
-
  # ===========================================================================
  #  Scientist form (no governance bonuses)
  # ===========================================================================
@@ -80,12 +72,6 @@
 
  zl_leader_trait_scientist_2:0 "Deep-Survey Optics"
  zl_leader_trait_scientist_2_desc:0 "It treats sensors as eyes, and the star sea as an open book."
-
- zl_leader_trait_scientist_3:0 "Archaeological Instinct"
- zl_leader_trait_scientist_3_desc:0 "One glance at a rock stratum tells it what lies buried."
-
- zl_leader_trait_scientist_4:0 "Well-Read"
- zl_leader_trait_scientist_4_desc:0 "It has read more than the entire science academy combined."
 
  # ===========================================================================
  #  Diplomacy form-switch menu (zl_leader.100)
