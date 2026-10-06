@@ -6,8 +6,11 @@ find_universal.py -- 列出【纯通用】特质的候选池
 这类特质不管领袖担任什么职位都生效，正是需求要的"正常的"特质。
 """
 import os, re, sys
+# 路径由 zlpaths 自动解析（可用环境变量 ZL_MOD / STELLARIS_GAME 覆盖）
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from zlpaths import MOD, GAME
 
-GAME = r"/path/to/Steam/steamapps/common/Stellaris"
 
 LOC = {}
 d = os.path.join(GAME, "localisation", "simp_chinese")

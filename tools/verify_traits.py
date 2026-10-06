@@ -1,8 +1,10 @@
 """校验本 mod 引用的所有【原版特质名】是否真实存在，并报告其类型。"""
 import os, re, sys
+# 路径由 zlpaths 自动解析（可用环境变量 ZL_MOD / STELLARIS_GAME 覆盖）
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from zlpaths import MOD, GAME
 
-GAME = r"/path/to/Steam/steamapps/common/Stellaris"
-MOD = r"/path/to/Documents/Paradox Interactive/Stellaris/mod/zl_unique_administrator"
 
 
 def strip_comments(t):

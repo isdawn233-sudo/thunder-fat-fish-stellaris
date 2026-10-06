@@ -22,8 +22,8 @@
 #      500 x 323，DXT5 (BC3)，带透明背景（半身相）
 #      与可用 mod 的 nf102.dds 同规格（162128 字节）
 #
-#  生成工具：/path/to/stellaris_mod_zl/tools\portrait_dds.py
-#      python portrait_dds.py --src 原图.png --out 目标.dds ^
+#  生成工具：tools/portrait_dds.py
+#      python tools/portrait_dds.py --src 原图.png --out 目标.dds ^
 #          --crop 0,20,941,941 --size 500 --height 323 --gain 0.515 --sat 1.40
 # ============================================================================
 

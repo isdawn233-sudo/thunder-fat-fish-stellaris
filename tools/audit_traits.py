@@ -8,8 +8,11 @@ audit_traits.py -- 审计本 mod 三形态配装里每个特质的作用域
     仅舰队   fleet_modifier / army_modifier —— 只有统率舰队/陆军时生效
 """
 import os, re
+# 路径由 zlpaths 自动解析（可用环境变量 ZL_MOD / STELLARIS_GAME 覆盖）
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from zlpaths import MOD, GAME
 
-GAME = r"/path/to/Steam/steamapps/common/Stellaris"
 
 # 三形态当前配装
 KITS = {
@@ -62,7 +65,6 @@ BLOCKS = {
     "其他": ["galcom_modifier", "federation_modifier", "background_planet_modifier"],
 }
 
-MOD = r"/path/to/Documents/Paradox Interactive/Stellaris/mod/zl_unique_administrator"
 MODTRAITS = {}
 mt = open(os.path.join(MOD, "common", "traits", "zl_leader_traits.txt"),
           encoding="utf-8-sig", errors="ignore").read()

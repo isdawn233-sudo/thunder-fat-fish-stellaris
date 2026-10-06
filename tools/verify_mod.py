@@ -6,9 +6,11 @@ verify_mod.py -- 本 mod 的完整静态校验
     4. 本地化键是否齐全
 """
 import os, re, struct, sys
+# 路径由 zlpaths 自动解析（可用环境变量 ZL_MOD / STELLARIS_GAME 覆盖）
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from zlpaths import MOD, GAME
 
-GAME = r"/path/to/Steam/steamapps/common/Stellaris"
-MOD = r"/path/to/Documents/Paradox Interactive/Stellaris/mod/zl_unique_administrator"
 
 fails = []
 warns = []

@@ -29,8 +29,8 @@
 #      29 x 29 DXT5，鱼形剪影（呼应特性名「大肥鱼」/ Big Fat Fish）
 #
 #  ── 想换图形 ─────────────────────────────────────────────────────────
-#  生成工具：/path/to/stellaris_mod_zl/tools\make_trait_icon.py
-#      python make_trait_icon.py --out 目标.dds --glyph fish
+#  生成工具：tools/make_trait_icon.py
+#      python tools/make_trait_icon.py --out 目标.dds --glyph fish
 #  可选图形：fish（鱼） / pillar（立柱） / seal（印环） / star（星）
 #
 #  换完必须完全退出游戏再进。

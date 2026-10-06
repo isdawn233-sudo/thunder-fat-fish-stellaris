@@ -10,13 +10,25 @@ make_deepseek_flag.py -- 用 DeepSeek 官方 logo（resources/icon.png 里的鲸
        flags/special/map/<name>.dds        256x256
        flags/special/small/<name>.dds       24x24
 """
-import os, struct
+import os, struct, sys
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-SRC = r"/path/to/whale.png"
-OUT = r"/path/to/Documents/Paradox Interactive/Stellaris/mod/zl_unique_administrator\flags\special"
-FRAMES = r"/path/to/frames"
+# 路径由 zlpaths 自动解析（可用环境变量 ZL_MOD / STELLARIS_GAME 覆盖）
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from zlpaths import MOD
+
+# 鲸鱼原图：默认找 tools/ 旁边的 whale-source.png
+# 可用环境变量 ZL_WHALE_SRC 指定，或用 --src 覆盖
+SRC = os.environ.get("ZL_WHALE_SRC", os.path.join(os.path.dirname(
+    os.path.abspath(__file__)), "whale-source.png"))
+
+# 输出到 mod 的 flags/special/
+OUT = os.path.join(MOD, "flags", "special")
+
+# 预览图输出目录（不存在会自动创建；设 ZL_FRAMES 可改）
+FRAMES = os.environ.get("ZL_FRAMES", os.path.join(os.path.dirname(
+    os.path.abspath(__file__)), "frames"))
 
 # DeepSeek 品牌蓝（取自其品牌色）
 BRAND_BLUE = (77, 107, 254)
@@ -144,12 +156,18 @@ def render_flag(mask, size, bg, fg, pad_ratio=0.14, round_corners=False,
 
 
 if __name__ == "__main__":
+    if not os.path.isfile(SRC):
+        raise SystemExit(
+            "找不到鲸鱼原图：%s\n"
+            "请把原图放到该位置，或用环境变量 ZL_WHALE_SRC 指定：\n"
+            r'    set ZL_WHALE_SRC=D:\path\to\whale.png' % SRC)
     print("提取 DeepSeek 鲸鱼 logo ...")
     mask = extract_whale(SRC)
 
     os.makedirs(OUT, exist_ok=True)
     os.makedirs(os.path.join(OUT, "map"), exist_ok=True)
     os.makedirs(os.path.join(OUT, "small"), exist_ok=True)
+    os.makedirs(FRAMES, exist_ok=True)
 
     # ---- 配色方案 ----
     # bg=None 表示【透明底】，只保留鲸鱼与字标

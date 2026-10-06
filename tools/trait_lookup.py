@@ -1,7 +1,10 @@
 """按"效果关键词"反查特质 key，方便精确挑选各职业的顶级特质。"""
 import os, re, sys
+# 路径由 zlpaths 自动解析（可用环境变量 ZL_MOD / STELLARIS_GAME 覆盖）
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from zlpaths import MOD, GAME
 
-GAME = r"/path/to/Steam/steamapps/common/Stellaris"
 LOC = {}
 d = os.path.join(GAME, "localisation", "simp_chinese")
 for fn in os.listdir(d):

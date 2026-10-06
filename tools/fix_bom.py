@@ -9,8 +9,11 @@ fix_bom.py -- 修正本地化文件的 UTF-8 BOM
 用法：  python fix_bom.py
 """
 import os, sys
+# 路径由 zlpaths 自动解析（可用环境变量 ZL_MOD / STELLARIS_GAME 覆盖）
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from zlpaths import MOD, GAME
 
-MOD = r"/path/to/Documents/Paradox Interactive/Stellaris/mod/zl_unique_administrator"
 BOM = b"\xef\xbb\xbf"
 
 fixed = 0
