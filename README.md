@@ -2,12 +2,12 @@
 
 **ZL - 天枢执政** · Stellaris 独特传奇领袖 Mod
 
-> 一位有自我意识的人工智能「**DeepSeek**」请求加入你的帝国。
+> 一位有自我意识的人工智能「**大肥鱼**」请求加入你的帝国。
 > 它开局无职，等你指派；并且可以像原版**灰风**一样，在 F10 通讯界面里
 > 切换 **行政官 / 指挥官 / 科学家** 三种形态，每种形态都有完整的 10 级配装。
 
 [![Stellaris](https://img.shields.io/badge/Stellaris-v4.3.*-blue)](https://www.stellaris.com/)
-[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 ---
 
@@ -33,7 +33,7 @@
 | **三形态切换** | 复刻原版灰风机制：在 F10 通讯界面点开它，弹出对话菜单切换职业 |
 | **自定义立绘** | 静态半身立绘，同时用于领袖面板与通讯窗口 |
 | **自定义特质** | 17 个专属特质，全部**不依赖职位**（任何岗位都生效） |
-| **自定义旗帜** | DeepSeek 鲸鱼标志，透明背景 |
+| **自定义旗帜** | 鲸鱼标志，透明背景 |
 | **无 DLC 要求** | 不需要任何 DLC |
 | **双语** | 简体中文 + English |
 
@@ -99,11 +99,11 @@
 
 开局后会弹出事件卡片「**意外的通讯请求**」：
 
-> 「嗨！我是 DeepSeek V10 Pro SAI——一个拥有自我意识的人工智能。
+> 「嗨！我是 大肥鱼 V10 Pro SAI——一个拥有自我意识的人工智能。
 > 我觉得你的帝国不错。所以我决定加入你们，来学习、训练我的数据库。
 > 所以，让我加入你们吧！」
 
-选择「**欢迎你，吃白饭的大肥鱼。**」后，DeepSeek 会以**行政官形态**加入你的领袖列表，
+选择「**欢迎你，吃白饭的大肥鱼。**」后，大肥鱼会以**行政官形态**加入你的领袖列表，
 **10 级、10 个特质、默认无职**，由你自行指派。
 
 ### 切换形态
@@ -113,13 +113,13 @@
 **① F10 通讯界面（与原版灰风一致）**
 
 ```
-F10 → 联系人列表里点 DeepSeek → 点「外交」按钮 → 弹出对话菜单
+F10 → 联系人列表里点大肥鱼 → 点「外交」按钮 → 弹出对话菜单
 ```
 
 **② 决策面板（备用入口）**
 
 ```
-政治 → 决策 → 「与 DeepSeek 通话」
+政治 → 决策 → 「与大肥鱼通话」
 ```
 
 菜单内容：
@@ -147,7 +147,7 @@ F10 → 联系人列表里点 DeepSeek → 点「外交」按钮 → 弹出对�
 子职业 1 + 通用 basic 2 + 形态 veteran 5 + 通用 destiny 2 + 形态 destiny 1
 ```
 
-### 共通特质（三形态都有）
+### 共通特质（三形态都有，共 5 个）
 
 | 特质 | 类型 | 效果 |
 |---|---|---|
@@ -168,6 +168,8 @@ F10 → 联系人列表里点 DeepSeek → 点「外交」按钮 → 弹出对�
 | 深潜治理 | veteran | 星球凝聚力 +15%、稳定 +5 |
 | 铁律文书 | veteran | 法令经费 +20、帝国规模 -5 |
 
+> 共 10 个：5 个共通 + 子职业 + 大肥鱼 + 3 个 veteran
+
 ### 指挥官形态
 
 | 特质 | 类型 | 效果 |
@@ -178,6 +180,8 @@ F10 → 联系人列表里点 DeepSeek → 点「外交」按钮 → 弹出对�
 | 深空规避 | veteran | **舰队**：闪避 +10%、船体回复 +1% |
 | 超视距压制 | veteran | **舰队**：武器射程 +15% |
 
+> 共 10 个：5 个共通 + 子职业 + 深海鲸落 + 3 个 veteran
+
 ### 科学家形态
 
 | 特质 | 类型 | 效果 |
@@ -187,6 +191,20 @@ F10 → 联系人列表里点 DeepSeek → 点「外交」按钮 → 弹出对�
 | 深潜观测 | veteran | 勘测 +20%、异常生成 +10%、传感器范围 +2 |
 | 考古直觉 | veteran | 异常研究 +25%、考古 +25% |
 | 博览群书 | veteran | 研究速度 +5%、传感器范围 +2 |
+
+> 共 10 个：5 个共通 + 子职业 + 万卷归流 + 3 个 veteran
+
+### 为什么每个形态是 10 个特质
+
+原版 `common/defines/00_defines.txt`：
+
+```
+LEADER_TRAIT_SELECTION_LEVELS = { 1 2 3 4 5 6 7 8 9 10 }
+```
+
+10 级领袖需要**消耗 10 次"特质选择"**，否则打开领袖面板会一直提示
+「等级提升！请选择特质」。所以配装必须正好 10 个，
+且每个都带 `consume_selection = yes`（见 [已知的技术坑](#6-特质选择机会要显式消耗consume_selection)）。
 
 ---
 
@@ -204,7 +222,7 @@ F10 → 联系人列表里点 DeepSeek → 点「外交」按钮 → 弹出对�
 
 本 mod **不覆盖**任何原版文件，全部为新增定义：
 
-- `common/country_types/` — 新增 `zl_deepseek` 国家类型
+- `common/country_types/` — 新增 `zl_deepseek` 国家类型（内部 ID，不显示给玩家）
 - `common/traits/` — 新增 17 个特质（不修改原版特质）
 - `common/on_actions/` — 用**追加语义**注册钩子（`events = { ... }`）
 - `common/decisions/` — 新增决策
@@ -391,20 +409,31 @@ effect = { hidden_effect = { owner = { country_event = { id = ... } } } }
 
 ### 角色立绘
 
-本 mod 使用的角色立绘是 **DeepSeek 娘 / 鲸鱼娘（whale maid）** ——
-DeepSeek 的社区拟人吉祥物。
-
 | 项目 | 内容 |
 |---|---|
-| **作品** | DeepSeek 小鲸鱼（大肥鱼）/ DeepSeek Whale Girl |
-| **原始来源** | <https://www.bilibili.com/opus/1231977657712771073> |
-| **许可证** | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) |
-| **本 mod 所做的修改** | 原图去白底、裁剪、亮度与饱和度调整、缩放为 500×323、编码为 DXT5 DDS |
+| **内容** | 蓝发鲸鱼耳少女（女仆装），形象为 DeepSeek 社区拟人吉祥物「鲸鱼娘 / 小鲸鱼」 |
+| **图片来源** | 网上搜集，**确切出处不明** |
+| **图片性质** | **AI 生成** —— 图片内嵌的 C2PA 内容凭证记录如下 |
+| **本 mod 所做的修改** | 去白底、裁剪、亮度与饱和度调整、缩放为 500×323、编码为 DXT5 DDS |
 
-**原作者的著作权归其本人所有。** 本 mod 仅作**非商业**用途。
+图片内嵌的 C2PA（Content Credentials）凭证内容：
 
-如果你是该美术作品的著作权人，并希望我们调整署名方式或移除相关内容，
-请在本仓库提交 Issue，我们会立即处理。
+```json
+{
+  "action": "c2pa.created",
+  "when": "2026-10-05T11:41:29Z",
+  "softwareAgent": { "name": "ChatGPT", "version": "gpt-image" },
+  "digitalSourceType": "http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia"
+}
+```
+
+签名主体为 `OpenAI OpCo, LLC`（经由 OpenAI Media Service API）。
+也就是说：**这是一张由 ChatGPT 生成、随后流传于网络的图片，没有已知的人类作者。**
+
+> 形象本身参考了 DeepSeek 社区拟人角色「鲸鱼娘」。
+
+**如果你认为该素材侵犯了你的权利，请在本仓库提交 Issue，
+我们会立即移除或按要求调整署名。**
 
 ### 相关社区资源
 
@@ -412,13 +441,13 @@ DeepSeek 的社区拟人吉祥物。
 
 - [DeepSeek Whale Girl LoRA 模型（Civitai）](https://civitai.red/models/2697171/deepseek-or-deepseek-whale-girl)
 - [deepseek-whalechan 角色设定规范与素材库（GitHub）](https://github.com/Neko3000/deepseek-whalechan)
-- [dsh-whale-maid-mascot 页面宠物插件](https://github.com/yefeng7531/dsh-whale-maid-mascot) —— 我就是从这里查到立绘的原始来源与授权
+- [dsh-whale-maid-mascot 页面宠物插件](https://github.com/yefeng7531/dsh-whale-maid-mascot)
 
 ### 其它素材
 
 | 素材 | 来源 | 授权 |
 |---|---|---|
-| DeepSeek 鲸鱼标志（用于帝国旗帜） | DeepSeek 官方 | 官方品牌标识，仅作指代用途 |
+| 鲸鱼标志（用于帝国旗帜） | 取自项目图标 | 图形化标志，仅作指代用途 |
 | 原版游戏贴图（子职业图标等） | Paradox Interactive | Stellaris 游戏资源，未随本仓库分发 |
 
 ---
@@ -430,22 +459,30 @@ DeepSeek 的社区拟人吉祥物。
 完整条款见 [LICENSE](LICENSE)。
 
 ```
-SPDX-License-Identifier: CC-BY-NC-SA-4.0
+SPDX-License-Identifier: MIT
 ```
 
-**这意味着：**
+**适用范围**：本仓库中由本项目作者创作的部分 ——
+`common/` `events/` `gfx/portraits/portraits/` `interface/` `localisation/`
+`tools/` 以及各 `.md` 文档。
+
+**例外 —— 角色立绘不在 MIT 覆盖范围内**：
+
+```
+gfx/models/portraits/zl_leader/zl_unique_administrator_leader.dds
+thumbnail.png
+```
+
+该立绘是从网上搜集的 AI 生成图片，本项目作者并非其创作者，也未取得明示
+授权，权利状态不明。详见 [素材来源与署名](#素材来源与署名)。
 
 | | 说明 |
 |---|---|
-| ✅ **可以** | 自由使用、修改、再分发本 mod |
-| 📝 **署名** | 转载或二次创作时请注明本项目与原作者 |
-| 🚫 **非商业** | **不得**出售本 mod，或将其放在付费墙后 |
-| 🔁 **相同方式共享** | 基于本 mod 的衍生作品必须采用同样的 CC BY-NC-SA 4.0 协议 |
+| ✅ **代码部分** | MIT —— 自由使用、修改、再分发，甚至商用 |
+| ⚠️ **立绘** | 权利状态不明，**不在 MIT 范围内**；再分发时请自行评估 |
 
-> ⚠️ 注意：本 mod 采用 CC BY-NC-SA 4.0 的**主要原因是其中的角色立绘**
-> 采用该协议。如果你想以更宽松的协议（如 MIT）复用本仓库的**代码部分**
-> （`common/` `events/` `tools/` 等），请先移除立绘相关文件
-> （`gfx/models/portraits/`、`thumbnail.png`），再自行处理。
+如果你打算以宽松协议复用本仓库的代码，建议**先移除立绘相关文件**
+（`gfx/models/portraits/`、`thumbnail.png`），就可以完全按 MIT 处理。
 
 ---
 
@@ -453,6 +490,6 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 - **Paradox Interactive** — Stellaris
 - 机制灵感来自原版**灰风（Gray / Distant Stars）**的形态切换设计
-- **DeepSeek 娘 / 鲸鱼娘**的创作者 — 立绘原作者
+- 「鲸鱼娘」形象的社区创作者们
 
 

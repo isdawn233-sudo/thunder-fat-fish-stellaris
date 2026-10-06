@@ -156,25 +156,54 @@ print()
 print("=" * 78)
 print("4) 本地化键完整性")
 print("=" * 78)
-LOC_REQ = ["NAME_zl_administrator", "NAME_zl_deepseek_country",
-           "zl_leader_trait_administrator", "zl_leader_trait_administrator_desc",
-           "zl_leader_trait_administrator_tt",
-           "zl_leader_trait_commander", "zl_leader_trait_commander_desc",
-           "zl_leader_trait_commander_tt",
-           "zl_leader_trait_scientist", "zl_leader_trait_scientist_desc",
-           "zl_leader_trait_scientist_tt",
+LOC_REQ = ["NAME_zl_administrator", "NAME_zl_administrator_short",
+           "NAME_zl_deepseek_country",
            "zl_administrator_desc", "zl_administrator_catch_phrase",
            "zl_leader.1.name", "zl_leader.1.desc",
            "zl_leader.1.a", "zl_leader.1.a.response",
            "zl_leader.1.b", "zl_leader.1.b.response",
            "zl_leader.100.name", "zl_leader.100.desc",
-           "zl_leader.100.a", "zl_leader.100.b", "zl_leader.100.c", "zl_leader.100.d"]
+           "zl_leader.100.a", "zl_leader.100.a.response",
+           "zl_leader.100.b", "zl_leader.100.b.response",
+           "zl_leader.100.c", "zl_leader.100.c.response",
+           "zl_leader.100.d", "zl_leader.100.d.response",
+           "decision_zl_deepseek_call", "decision_zl_deepseek_call_desc",
+           "decision_zl_deepseek_call_tt"]
+
+# 自动从本 mod 的特质定义推导需要哪些本地化键：
+#   每个特质必须有 <key> 与 <key>_desc
+#   若 traits 文件里写了 custom_tooltip_with_modifiers = X，则还要 X
+# 这样以后增删特质不必再来改这个脚本。
+tr_p = os.path.join(MOD, "common", "traits", "zl_leader_traits.txt")
+tr_t = read(tr_p)
+for m in re.finditer(r'(?m)^\s*(zl_leader_trait_\w+)\s*=\s*\{', tr_t):
+    k = m.group(1)
+    LOC_REQ.append(k)
+    LOC_REQ.append(k + "_desc")
+for m in re.finditer(r'custom_tooltip_with_modifiers\s*=\s*(\w+)', tr_t):
+    LOC_REQ.append(m.group(1))
+
+# 事件与决策里引用的 title/desc/name/custom_tooltip 键
+for rel in (("events", "zl_unique_administrator_events.txt"),
+            ("common", "decisions", "zl_unique_administrator_decisions.txt")):
+    p = os.path.join(MOD, *rel)
+    if not os.path.exists(p):
+        continue
+    et = read(p)
+    for pat in (r'(?:title|desc|name|custom_tooltip)\s*=\s*"([a-zA-Z0-9_.]+)"',
+                r'(?:title|desc|name)\s*=\s*(zl_\w+\.\d+\.[a-z]+)'):
+        for m in re.finditer(pat, et):
+            LOC_REQ.append(m.group(1))
+
+LOC_REQ = sorted(set(LOC_REQ))
+
 for lang in ("simp_chinese", "english"):
     p = os.path.join(MOD, "localisation", lang,
                      "zl_unique_administrator_l_%s.yml" % lang)
     t = read(p)
     missing = [k for k in LOC_REQ if not re.search(r'(?m)^\s*' + re.escape(k) + r':', t)]
-    print("  %-4s %-14s 缺失 %d 个" % ("OK" if not missing else "FAIL", lang, len(missing)))
+    print("  %-4s %-14s 需 %d 键, 缺失 %d 个"
+          % ("OK" if not missing else "FAIL", lang, len(LOC_REQ), len(missing)))
     for k in missing:
         fails.append("[本地化 %s] 缺 %s" % (lang, k))
         print("        缺: %s" % k)

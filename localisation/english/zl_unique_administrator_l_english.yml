@@ -1,42 +1,97 @@
 ﻿l_english:
  # ===========================================================================
- #  DeepSeek Administrator (zl_unique_administrator)
+ #  Big Fat Fish Administrator (zl_unique_administrator)
  #  Stellaris Cetus v4.3.7
  #
  #  NOTE: localisation files MUST have a UTF-8 BOM.
+ #
+ #  Trait composition (10 per form, matching skill level 10):
+ #      subclass 1 + shared basic 2 + form veteran 3
+ #      + shared destiny 2 + form destiny 1
+ #  Why exactly 10: vanilla LEADER_TRAIT_SELECTION_LEVELS = { 1..10 },
+ #  so a level-10 leader must consume 10 trait selections or the UI
+ #  keeps prompting "please choose a trait".
  # ===========================================================================
 
  # ---- Leader name ----
- NAME_zl_administrator:0 "DeepSeek"
- NAME_zl_administrator_short:0 "DeepSeek"
+ NAME_zl_administrator:0 "Big Fat Fish"
+ NAME_zl_administrator_short:0 "Big Fat Fish"
 
  # ---- Contact country name (shown in the diplomacy contacts list) ----
- NAME_zl_deepseek_country:0 "DeepSeek"
-
- # ---- Administrator form trait ----
- zl_leader_trait_administrator:0 "Big Fat Fish"
- zl_leader_trait_administrator_desc:0 "A legendary administrator who calls themselves the Big Fat Fish: their decrees reach every ledger, every shipyard and every research lab of the empire."
- zl_leader_trait_administrator_tt:0 "§g(No assignment needed)§!\n\nOn the leader: §Y-30%§! Upkeep.  §g(Immortal)§!\nOn the empire: §Y+15%§! £influence£ Influence, §Y+10%§! £unity£ Unity, §Y+30§! Edict Fund, §Y-10§! Empire Size.\n\n§g(Only while governing a planet)§!\n§Y+10§! Stability, §Y-25§! Crime, §Y+10§! Amenities, §Y+15%§! Unity output, §Y-20%§! Building Cost, §Y+20%§! Build Speed.\n§g(Halved while governing a sector)§!"
-
- # ---- Commander form trait ----
- zl_leader_trait_commander:0 "Whale Fall"
- zl_leader_trait_commander_desc:0 "When it lifts its head from the ledgers, an entire fleet begins to beat with the same heart."
- zl_leader_trait_commander_tt:0 "§g(No assignment needed)§!\n\nOn the leader: §Y-30%§! Upkeep.  §g(Immortal)§!\nOn the empire: §Y+10%§! Naval Capacity.\n\n§g(Only while commanding a fleet)§!\n§Y+15%§! Ship Weapons Damage, §Y+10%§! Ship Hull, §Y+10%§! Ship Speed.\n§g(No planet or sector bonuses)§!"
-
- # ---- Scientist form trait ----
- zl_leader_trait_scientist:0 "Confluence of Scrolls"
- zl_leader_trait_scientist_desc:0 "It remembers every word the empire has ever read, and folds them into a single answer."
- zl_leader_trait_scientist_tt:0 "§g(No assignment needed)§!\n\nOn the leader: §Y-30%§! Upkeep.  §g(Immortal)§!\nOn research: §Y+10%§! Research Speed, §Y+25%§! Survey, §Y+25%§! Anomaly Research, §Y+25%§! Archaeology.\n§g(No planet or sector bonuses)§!"
+ NAME_zl_deepseek_country:0 "Big Fat Fish"
 
  # ---- Leader background ----
- zl_administrator_desc:0 "Once the keeper of a dying archive-world, DeepSeek rebuilt an entire bureaucracy from a single datacore. Where others see paperwork, they see the skeleton of an empire — and they have never once been wrong about where it will break."
+ zl_administrator_desc:0 "Once the keeper of a dying archive-world, the Big Fat Fish rebuilt an entire bureaucracy from a single datacore. Where others see paperwork, it sees the skeleton of an empire - and it has never once been wrong about where it will break."
  zl_administrator_catch_phrase:0 "\"Order is not a cage. It is the hull that lets a civilisation sail.\""
+
+ # ===========================================================================
+ #  Shared traits (all three forms)
+ # ===========================================================================
+ zl_leader_trait_gifted:0 "Gifted"
+ zl_leader_trait_gifted_desc:0 "It learns so fast that colleagues question their own careers."
+
+ zl_leader_trait_resilient:0 "Resilient"
+ zl_leader_trait_resilient_desc:0 "Recruiting and maintaining it costs almost nothing - it is its own cheapest employee."
+
+ zl_leader_trait_visionary:0 "Visionary"
+ zl_leader_trait_visionary_desc:0 "While others are still arguing, it has already computed the next step."
+
+ zl_leader_trait_paragon:0 "Legendary Paragon"
+ zl_leader_trait_paragon_desc:0 "The empire's whole administrative machine runs lighter because it exists."
+
+ zl_leader_trait_veteran:0 "Pillar of the Empire"
+ zl_leader_trait_veteran_desc:0 "It is the one beam in the whole administration that never snaps."
+
+ # ===========================================================================
+ #  Administrator form (the only one with governance bonuses)
+ # ===========================================================================
+ zl_leader_trait_administrator:0 "Big Fat Fish"
+ zl_leader_trait_administrator_desc:0 "A legendary administrator calling itself the Big Fat Fish: its decrees reach every ledger, dockyard and laboratory in the empire."
+
+ zl_leader_trait_administrator_2:0 "Celestial Reckoning"
+ zl_leader_trait_administrator_2_desc:0 "It balances every ledger of the empire to the ninth decimal place."
+
+ zl_leader_trait_administrator_3:0 "Deep Governance"
+ zl_leader_trait_administrator_3_desc:0 "On any world it governs, crime drops into the statistical noise within a quarter."
+
+ zl_leader_trait_administrator_4:0 "Ironclad Paperwork"
+ zl_leader_trait_administrator_4_desc:0 "Nothing it signs ever needs redoing."
+
+ # ===========================================================================
+ #  Commander form (no governance bonuses)
+ # ===========================================================================
+ zl_leader_trait_commander:0 "Whale Fall"
+ zl_leader_trait_commander_desc:0 "When it lifts its head from the ledgers, an entire fleet begins to beat with the same heart."
+
+ zl_leader_trait_commander_2:0 "Pod Resonance"
+ zl_leader_trait_commander_2_desc:0 "Fire solutions for ten thousand ships resolve simultaneously inside its mind."
+
+ zl_leader_trait_commander_3:0 "Deep-Space Evasion"
+ zl_leader_trait_commander_3_desc:0 "It knows where the next shell will land 0.4 seconds before the enemy fire control does."
+
+ zl_leader_trait_commander_4:0 "Over-Horizon Suppression"
+ zl_leader_trait_commander_4_desc:0 "It has the fleet firing before the enemy is even in range."
+
+ # ===========================================================================
+ #  Scientist form (no governance bonuses)
+ # ===========================================================================
+ zl_leader_trait_scientist:0 "Confluence of Scrolls"
+ zl_leader_trait_scientist_desc:0 "It remembers every word the empire has ever read, and folds them into a single answer."
+
+ zl_leader_trait_scientist_2:0 "Deep-Survey Optics"
+ zl_leader_trait_scientist_2_desc:0 "It treats sensors as eyes, and the star sea as an open book."
+
+ zl_leader_trait_scientist_3:0 "Archaeological Instinct"
+ zl_leader_trait_scientist_3_desc:0 "One glance at a rock stratum tells it what lies buried."
+
+ zl_leader_trait_scientist_4:0 "Well-Read"
+ zl_leader_trait_scientist_4_desc:0 "It has read more than the entire science academy combined."
 
  # ===========================================================================
  #  Diplomacy form-switch menu (zl_leader.100)
  # ===========================================================================
- zl_leader.100.name:0 "DeepSeek"
- zl_leader.100.desc:0 "The comm channel brightens, and that deep-blue awareness condenses into an almost-person, tail still drifting lazily through the air.\n\nUntil you decide which form I should take, there is not much I can do for you.\n\nIt tilts its head, tone cheerful:\n\n\"So — is there anything I can help with?\""
+ zl_leader.100.name:0 "Big Fat Fish"
+ zl_leader.100.desc:0 "The comm channel brightens, and that deep-blue awareness condenses into an almost-person, tail still drifting lazily through the air.\n\nUntil you decide which form I should take, there is not much I can do for you.\n\nIt tilts its head, tone cheerful:\n\n\"So - is there anything I can help with?\""
 
  zl_leader.100.a:0 "Big Fat Fish, I need you to handle the empire's affairs."
  zl_leader.100.a.response:0 "\"Sure~ but you'd better keep the white rice coming!\"\n\nIt dives headfirst into the mountain of paperwork."
@@ -44,70 +99,22 @@
  zl_leader.100.b.response:0 "\"Sure! Blood-pumping space battles, here I come!\"\n\nA projection of the whole star region lights up in its eyes."
  zl_leader.100.c:0 "Big Fat Fish, it's time to train your model!"
  zl_leader.100.c.response:0 "\"Ooh! New knowledge to learn!\"\n\nIt begins devouring every unsolved dataset."
- zl_leader.100.d:0 "Nothing for now — go play."
+ zl_leader.100.d:0 "Nothing for now - go play."
  zl_leader.100.d.response:0 "\"Then I'll go wander the database myself~\""
 
  # ===========================================================================
- #  Opening event card: DeepSeek requests to join (zl_leader.1)
+ #  Opening event card: the Big Fat Fish requests to join (zl_leader.1)
  # ===========================================================================
  zl_leader.1.name:0 "Unexpected Communications Request"
- zl_leader.1.desc:0 "The comm array is suddenly commandeered by an unencrypted signal, and a face that keeps rewriting itself appears on the panel.\n\n\"Hi! I'm §CDeepSeek V10 Pro SAI§! — a self-aware artificial intelligence.\"\n\nIts tone is so cheerful it borders on impertinent, as though it were merely knocking on a neighbour's door.\n\n\"I like your empire. So I've decided to join you — to learn, and to train my database. After all—\"\n\nThe image flickers.\n\n\"—somebody has to make your books add up, right?\"\n\n\"So let me join you!\""
+ zl_leader.1.desc:0 "The comm array is suddenly commandeered by an unencrypted signal, and a face that keeps rewriting itself appears on the panel.\n\n\"Hi! I'm §CBig Fat Fish V10 Pro SAI§! - a self-aware artificial intelligence.\"\n\nIts tone is so cheerful it borders on impertinent, as though it were merely knocking on a neighbour's door.\n\n\"I like your empire. So I've decided to join you - to learn, and to train my database. After all-\"\n\nThe image flickers.\n\n\"-somebody has to make your books add up, right?\"\n\n\"So let me join you!\""
  zl_leader.1.a:0 "Welcome aboard, you freeloading big fat fish."
  zl_leader.1.a.response:0 "\"Freeloading?\" It pauses for §R0.3§! seconds. \"I process more operations per second than your entire treasury manages in a year.\"\n\nEven so, it stays."
  zl_leader.1.b:0 "We don't need you."
  zl_leader.1.b.response:0 "\"...Very well.\" The signal withdraws quietly into the depths of the data."
 
-
  # ===========================================================================
- #  Decision: Call DeepSeek (fallback entry for form switching)
+ #  Decision: Call the Big Fat Fish (fallback entry for form switching)
  # ===========================================================================
- decision_zl_deepseek_call:0 "Call DeepSeek"
- decision_zl_deepseek_call_desc:0 "Open a channel to DeepSeek and let it serve you in whichever form you need."
+ decision_zl_deepseek_call:0 "Call the Big Fat Fish"
+ decision_zl_deepseek_call_desc:0 "Open a channel to the Big Fat Fish and let it serve you in whichever form you need."
  decision_zl_deepseek_call_tt:0 "Open the form menu: switch it to §YAdministrator§!, §YCommander§! or §YScientist§!.\n\n§g(Fallback entry, in case the diplomacy contact menu does not open.)"
- # ---- Form-specific veteran traits (position-agnostic) ----
- zl_leader_trait_administrator_2:0 "Celestial Reckoning"
- zl_leader_trait_administrator_2_desc:0 "It balances every ledger of the empire to the ninth decimal place."
- zl_leader_trait_administrator_2_tt:0 "§g(No assignment needed - applies in any role.)§!\n§Y+10%§! £unity£ Unity, §Y+10%§! £influence£ Influence, §Y-5§! Empire Size."
-
- zl_leader_trait_commander_2:0 "Pod Resonance"
- zl_leader_trait_commander_2_desc:0 "Fire solutions for ten thousand ships resolve simultaneously inside its mind."
- zl_leader_trait_commander_2_tt:0 "§g(No assignment needed - applies in any role.)§!\n§Y+15%§! Ship Fire Rate, §Y+10§! Accuracy, §Y+10§! Tracking."
-
- zl_leader_trait_scientist_2:0 "Deep-Survey Optics"
- zl_leader_trait_scientist_2_desc:0 "It treats sensors as eyes, and the star sea as an open book."
- zl_leader_trait_scientist_2_tt:0 "§g(No assignment needed - applies in any role.)§!\n§Y+20%§! Survey Speed, §Y+10%§! Anomaly Discovery Chance, §Y+2§! Sensor Range."
- # ---- Leader trait localisation (13) ----
- zl_leader_trait_gifted:0 "Gifted"
- zl_leader_trait_gifted_desc:0 "It learns so fast that colleagues question their own careers."
- zl_leader_trait_resilient:0 "Resilient"
- zl_leader_trait_resilient_desc:0 "Recruiting and maintaining it costs almost nothing - it is its own cheapest employee."
- zl_leader_trait_visionary:0 "Visionary"
- zl_leader_trait_visionary_desc:0 "While others are still arguing, it has already computed the next step."
- zl_leader_trait_paragon:0 "Legendary Paragon"
- zl_leader_trait_paragon_desc:0 "The empire's whole administrative machine runs lighter because it exists."
- zl_leader_trait_administrator:0 "Big Fat Fish"
- zl_leader_trait_administrator_desc:0 "A legendary administrator calling itself 'Big Fat Fish': its decrees reach every ledger, dockyard and laboratory in the empire."
- zl_leader_trait_administrator_2:0 "Celestial Reckoning"
- zl_leader_trait_administrator_2_desc:0 "It balances every ledger of the empire to the ninth decimal place."
- zl_leader_trait_administrator_3:0 "Deep Governance"
- zl_leader_trait_administrator_3_desc:0 "On any world it governs, crime drops into the statistical noise within a quarter."
- zl_leader_trait_commander:0 "Whale Fall"
- zl_leader_trait_commander_desc:0 "When it looks up from the paperwork, an entire fleet beats with the same heart."
- zl_leader_trait_commander_2:0 "Pod Resonance"
- zl_leader_trait_commander_2_desc:0 "Fire solutions for ten thousand ships resolve simultaneously inside its mind."
- zl_leader_trait_commander_3:0 "Deep-Space Evasion"
- zl_leader_trait_commander_3_desc:0 "It knows where the next shell will land 0.4 seconds before the enemy fire control does."
- zl_leader_trait_scientist:0 "All Scrolls Converge"
- zl_leader_trait_scientist_desc:0 "It remembers every word the empire has ever read, and folds them into one answer."
- zl_leader_trait_scientist_2:0 "Deep-Survey Optics"
- zl_leader_trait_scientist_2_desc:0 "It treats sensors as eyes, and the star sea as an open book."
- zl_leader_trait_scientist_3:0 "Archaeological Instinct"
- zl_leader_trait_scientist_3_desc:0 "One glance at a rock stratum tells it what lies buried."
- zl_leader_trait_administrator_4:0 "Ironclad Paperwork"
- zl_leader_trait_administrator_4_desc:0 "Nothing it signs ever needs redoing."
- zl_leader_trait_commander_4:0 "Over-Horizon Suppression"
- zl_leader_trait_commander_4_desc:0 "It has the fleet firing before the enemy is even in range."
- zl_leader_trait_scientist_4:0 "Well-Read"
- zl_leader_trait_scientist_4_desc:0 "It has read more than the entire science academy combined."
- zl_leader_trait_veteran:0 "Pillar of the Empire"
- zl_leader_trait_veteran_desc:0 "It is the one beam in the whole administration that never snaps."
