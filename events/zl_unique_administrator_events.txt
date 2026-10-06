@@ -160,14 +160,26 @@ country_event = {
 			save_global_event_target_as = zl_deepseek_country
 			log = "ZLDBG: [99] STEP 3/9 - comms established"
 
-			# ---- 给它一个绑定自定义静态立绘的物种 ----
-			# 通讯窗口（F10 点开联系人）显示的肖像是"对方国家的物种肖像"。
-			# 若不给物种，通讯窗口会回退到玩家种族肖像 —— 所以必须建一个
-			# 自带自定义立绘的物种。
+			# ---- 建一个【机械】物种，绑自定义静态立绘 ----
+			# 用途有二：
+			#   1) 联系人国的物种（通讯窗口显示它的肖像）
+			#   2) 领袖 DeepSeek 的物种（species = event_target:zl_deepseek_species）
+			#
+			# ★ class 必须是 ROBOT 或 MACHINE，不能是 REP
+			#   依据（common/traits/02_species_traits_basic_characteristics.txt）：
+			#       trait_mechanical = {
+			#           allowed_archetypes = { ROBOT MACHINE }
+			#       }
+			#   而 REP 的 archetype 是 BIOLOGICAL，所以：
+			#       · 机械特质会被静默拒绝（挂不上）
+			#       · 而且 REP 自带 trait = "trait_organic"
+			#   ROBOT 的 archetype 就是 ROBOT，且 portrait_modding = yes，
+			#   是本 mod 自定义静态肖像能用的机械原型。
 			#
 			# portrait 指向本 mod 的 portrait 定义（gfx/portraits/portraits/
 			# zl_unique_administrator_portraits.txt 里的 zl_administrator），
-			# 那是静态 texturefile 肖像，与领袖立绘同一张半身图。
+			# 那是静态 texturefile 肖像（无 entity 绑定），
+			# 所以不挑 species class。
 			#
 			# ⚠ 原版【没有】set_species 这个 effect；
 			#   给国家换主种族用 change_species（原版用法见多处：
@@ -175,9 +187,12 @@ country_event = {
 			create_species = {
 				name = "NAME_zl_deepseek_country"
 				plural = "NAME_zl_deepseek_country"
-				class = "REP"
+				class = "ROBOT"
 				portrait = "zl_administrator"
 				namelist = "REP2"
+				# 机械物种的原版写法（见原版事件里的 Surveillance_Bots）：
+				# 机械没有气候偏好，用 pc_machine（机械星球）
+				ideal_planet_class = pc_machine
 				traits = {
 					trait = "trait_mechanical"
 				}
@@ -186,7 +201,8 @@ country_event = {
 			change_species = last_created_species
 			log = "ZLDBG: [99] STEP 5/9 - change_species done"
 
-			# 记录这个物种，供领袖肖像引用
+			# 保存为全局事件目标：
+			# 领袖用 species = event_target:zl_deepseek_species 引用它
 			last_created_species = {
 				save_global_event_target_as = zl_deepseek_species
 			}
@@ -207,7 +223,12 @@ country_event = {
 		create_leader = {
 			class = official
 			tier = leader_tier_legendary
-			species = root.owner_main_species
+			# ★ 物种 = 上面建的【机械物种】（带 trait_mechanical + 自定义立绘）
+			#   之前用的是 root.owner_main_species（= 玩家自己的种族），
+			#   所以领袖显示成人类。改成机械物种后：
+			#     · 领袖算机械体
+			#     · 而且它自带我们的自定义肖像
+			species = event_target:zl_deepseek_species
 			name = "NAME_zl_administrator"
 			gender = indeterminable
 			# ★ skill 直接用 10，与灰风一致（gray_goo_effects.txt 的
