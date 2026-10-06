@@ -1,48 +1,37 @@
 """
-make_thumbnail.py —— 生成创意工坊封面（512x512）
+make_thumbnail.py —— 生成创意工坊封面
 
 输入：thumbnail-source.png（用户提供的原图）
 输出：thumbnail.png
 
-要点（踩过的坑）：
-  · 工坊要求 thumbnail.png、>=512x512、< 1MB
-  · 原图自带白底，且下方有大片空白 —— 必须裁掉，
-    否则合成到方形画布后整体构图偏上、底部空一大块
-  · 图片区域放大一点、标题下移，整体才平衡
+── 为什么用【横向】而不是正方形 ──────────────────────────────────────
+工坊虽然推荐 >=512x512，但【启动器 Mod 库里的显示框是横向的】。
+实测：正方形封面会被按横向框裁切，底部内容（例如画在图里的标题）会被切掉。
+
+因此这里输出一个横向比例（约 1.4:1）的封面：
+  · 与启动器的显示框比例接近 → 不会被裁掉内容
+  · 高度仍然 >= 512，满足工坊要求
+  · 不把标题画进图片 —— 启动器旁边本来就会显示 mod 名字，
+    画进去反而会被裁掉。
+
+构图：整张原图直接用（气泡 + 手 + 角色一应俱全），
+      只裁掉底部多余的白边。
 """
 import os
-from PIL import Image, ImageDraw, ImageFont
-
+from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 MOD = os.path.dirname(HERE)
 SRC = os.path.join(MOD, "thumbnail-source.png")
 OUT = os.path.join(MOD, "thumbnail.png")
 
-CANVAS = 512
-SCALE = 1.05          # 图片放大系数（>1 表示裁掉更多留白）
-TITLE = "ZL - 大肥鱼天枢执政"
-
-# 裁剪设置：原图下方空白多，切掉一些
-CROP_BOTTOM = 40      # 从底部裁掉的像素
-TOP_MARGIN = 14       # 图片上方留白（太小会显得贴边）
-
-FONTS = [
-    r"C:\Windows\Fonts\msyhbd.ttc",
-    r"C:\Windows\Fonts\msyh.ttc",
-    r"C:\Windows\Fonts\simhei.ttf",
-    r"C:\Windows\Fonts\arialbd.ttf",
-]
-
-
-def load_font(size):
-    for f in FONTS:
-        if os.path.isfile(f):
-            try:
-                return ImageFont.truetype(f, size)
-            except Exception:
-                pass
-    return ImageFont.load_default()
+HEIGHT = 512
+# 目标宽高比（≈ 启动器 Mod 卡片的显示框比例）
+ASPECT = 1.40
+# 从底部裁掉多少纯白（原图下方有约 40px）
+CROP_BOTTOM = 40
+# 左右各裁掉多少（可选，用于微调构图；负数表示不裁）
+CROP_SIDE = 0
 
 
 def main():
@@ -50,60 +39,36 @@ def main():
         raise SystemExit("找不到原图: %s" % SRC)
 
     im = Image.open(SRC).convert("RGB")
-    W, H = im.size
-    print("原图: %dx%d" % (W, H))
+    print("原图: %dx%d  (宽高比 %.3f)" % (im.width, im.height, im.width / im.height))
 
-    # 1) 底部裁掉一些空白
-    if CROP_BOTTOM > 0 and H - CROP_BOTTOM > 100:
-        im = im.crop((0, 0, W, H - CROP_BOTTOM))
-    W, H = im.size
-    print("裁剪后: %dx%d" % (W, H))
+    # 1) 裁掉底部白边
+    if CROP_BOTTOM > 0 and im.height - CROP_BOTTOM > 100:
+        im = im.crop((0, 0, im.width, im.height - CROP_BOTTOM))
+    # 2) 可选：裁掉左右
+    if CROP_SIDE > 0 and im.width - 2 * CROP_SIDE > 200:
+        im = im.crop((CROP_SIDE, 0, im.width - CROP_SIDE, im.height))
 
-    # 2) 缩放（SCALE 越大，留白越少）
-    nw = int(W * SCALE)
-    nh = int(H * SCALE)
+    W, H = im.size
+    print("裁边后: %dx%d  (%.3f)" % (W, H, W / H))
+
+    # 3) 整图缩放，【不裁切】：
+    #    先按宽度铺满，再按高度铺满，取较小的缩放比 -> 保证内容完整
+    target_w = int(round(HEIGHT * ASPECT))
+    scale = min(target_w / W, HEIGHT / H)
+    nw, nh = int(round(W * scale)), int(round(H * scale))
     im = im.resize((nw, nh), Image.LANCZOS)
-    print("放大后: %dx%d" % (nw, nh))
 
-    # 3) 在 512 高的画布里，图片占约 63%，标题占剩下的部分
-    IMG_AREA = int(CANVAS * 0.63)
-    if nh > IMG_AREA:                      # 太高就等比缩回去
-        k = IMG_AREA / nh
-        nw, nh = int(nw * k), IMG_AREA
-        im = im.resize((nw, nh), Image.LANCZOS)
-    if nw > CANVAS:                        # 太宽就裁中间
-        left = (nw - CANVAS) // 2
-        im = im.crop((left, 0, left + CANVAS, nh))
-        nw = CANVAS
+    # 4) 画布居中放置，四周不足处补白（原图本就是白底，衔接自然）
+    canvas = Image.new("RGB", (target_w, HEIGHT), (255, 255, 255))
+    canvas.paste(im, ((target_w - nw) // 2, (HEIGHT - nh) // 2))
+    im = canvas
 
-    canvas = Image.new("RGB", (CANVAS, CANVAS), (255, 255, 255))
-    # 图片顶部留一点，避免气泡贴边；其余空间给标题
-    top = TOP_MARGIN
-    canvas.paste(im, ((CANVAS - nw) // 2, top))
-    print("图片放置: (%d, %d)  %dx%d" % ((CANVAS - nw) // 2, top, nw, nh))
-
-    # 4) 标题：垂直居中在图片下方的空白里
-    d = ImageDraw.Draw(canvas)
-    space_top = top + nh
-    space_h = CANVAS - space_top
-    size = 34
-    font = load_font(size)
-    bbox = d.textbbox((0, 0), TITLE, font=font)
-    tw = bbox[2] - bbox[0]
-    while tw > CANVAS - 40 and size > 16:
-        size -= 2
-        font = load_font(size)
-        bbox = d.textbbox((0, 0), TITLE, font=font)
-        tw = bbox[2] - bbox[0]
-    th = bbox[3] - bbox[1]
-    ty = space_top + (space_h - th) // 2 - bbox[1]
-    d.text(((CANVAS - tw) // 2 - bbox[0], ty), TITLE, font=font, fill=(28, 38, 66))
-    print("标题: y=%d  字号=%d  下方空间=%dpx" % (ty, size, space_h))
-
-    canvas.save(OUT, "PNG")
+    im.save(OUT, "PNG")
     kb = os.path.getsize(OUT) / 1024
-    print("输出: %s  %.1f KB  %dx%d" % (OUT, kb, canvas.width, canvas.height))
-    assert canvas.size == (CANVAS, CANVAS)
+    print("输出: %s" % OUT)
+    print("  %dx%d  (%.3f)  %.1f KB   图片区 %dx%d 居中"
+          % (im.width, im.height, im.width / im.height, kb, nw, nh))
+    assert im.height >= 512 and im.width >= 512
     assert os.path.getsize(OUT) < 1024 * 1024
 
 
