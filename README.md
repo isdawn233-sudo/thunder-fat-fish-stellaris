@@ -41,6 +41,7 @@
 - [关于 AI 生成](#关于-ai-生成)
 - [特性](#特性)
 - [安装](#安装)
+- [上传到创意工坊](#上传到创意工坊)
 - [玩法说明](#玩法说明)
 - [领袖特质一览](#领袖特质一览)
 - [兼容性](#兼容性)
@@ -80,21 +81,26 @@
 
 ## 安装
 
-### 方法一：手动安装（推荐）
+### 方法一：手动安装
+
+Stellaris 的 mod 采用**「一个文件夹 + 一个同名 .mod 文件」**的结构（详见
+[官方 wiki](https://stellaris.paradoxwikis.com/Modding#File_and_folder_structure)）。
 
 1. 下载本仓库（`Code` → `Download ZIP`，或 `git clone`）
-2. 把 `zl_unique_administrator` 文件夹放到：
+2. 把 `zl_unique_administrator` 文件夹整个放到 mod 目录：
 
    ```
    %USERPROFILE%\Documents\Paradox Interactive\Stellaris\mod\
    ```
 
-   最终路径应该是：
+   放好后应该是：
    ```
    ...\Stellaris\mod\zl_unique_administrator\descriptor.mod
+   ...\Stellaris\mod\zl_unique_administrator\common\...
    ```
 
-3. 在同级目录（`mod\`）下新建一个文本文件 `zl_unique_administrator.mod`，内容：
+3. **在同级目录**（也就是 `mod\` 里面，不是 mod 文件夹里面）新建一个
+   文本文件 `zl_unique_administrator.mod`，内容如下：
 
    ```
    version="1.0.0"
@@ -102,21 +108,98 @@
        "Gameplay"
        "Leaders"
        "Character"
+       "Anime"
    }
-   name="ZL - 天枢执政 (独特传奇行政官领袖)"
+   name="ZL - 大肥鱼天枢执政 (独特传奇领袖·三形态)"
    picture="thumbnail.png"
    supported_version="v4.3.*"
-   path="C:/Users/你的用户名/Documents/Paradox Interactive/Stellaris/mod/zl_unique_administrator"
+   path="C:/Users/YOUR_USERNAME/Documents/Paradox Interactive/Stellaris/mod/zl_unique_administrator"
    ```
 
-   > ⚠️ **`path` 必须改成你自己的实际路径**（把 `你的用户名` 换掉）。
-   > 这一步最容易出错：路径不对，启动器会直接忽略这个 mod。
+   > ⚠️ **只需改 `path` 一行** —— 把 `YOUR_USERNAME` 换成你自己的 Windows 用户名。
+   >
+   > - 路径必须用**正斜杠 `/`**，不能用反斜杠 `\`
+   > - 也可以写成相对路径：`path="mod/zl_unique_administrator"`
+   > - 路径写错 → 启动器**直接忽略**这个 mod，且不报错（最难排查的一步）
 
-4. 启动器 → **所有已安装的 Mod** → 启用《ZL - 天枢执政》→ 加入播放集
+   > 💡 `descriptor.mod`（在 mod 文件夹**里面**）**不需要** `path=` 一行，
+   > 这是官方 wiki 明确说明的。本仓库提供的 `descriptor.mod` 已符合该格式。
+
+   仓库里也附了两个模板可直接改：
+   [descriptor.mod.template](descriptor.mod.template) 与
+   [zl_unique_administrator.mod.template](zl_unique_administrator.mod.template)
+
+4. 确认编码正确（**这一步最容易忽略**）：
+
+   | 文件 | 编码 |
+   |---|---|
+   | `.mod` / `.txt` / `.gfx` | UTF-8 **不带** BOM |
+   | `.yml`（localisation） | UTF-8 **带** BOM |
+
+   > `.mod` 带 BOM 会让启动器报 `Unexpected token` 并**跳过整个 mod**。
+
+5. 启动器 → **所有已安装的 Mod** → 启用《ZL - 大肥鱼天枢执政》
+   → 加入播放集 → 开始游戏
 
 ### 方法二：Steam 创意工坊
 
-（如已上传，在此补充链接）
+见 [上传到创意工坊](#上传到创意工坊) 一节。
+（如果你是通过工坊订阅的，**不要**再保留本地的 `.mod` 文件，否则会冲突。）
+
+---
+
+## 上传到创意工坊
+
+> 本节步骤依据 [官方 wiki · Uploading and updating a mod](https://stellaris.paradoxwikis.com/Modding#Uploading_and_updating_a_mod)。
+
+### 上传前检查
+
+| 检查项 | 要求 | 本 mod |
+|---|---|---|
+| `descriptor.mod` 里有 `name` | 必须 | ✅ |
+| `picture="thumbnail.png"` | 必须，且名字固定 | ✅ |
+| `thumbnail.png` | PNG、≥512×512、**< 1 MB** | ✅ 512×512、454 KB |
+| `descriptor.mod` 里有 `path=` | **不需要**（会被忽略） | ✅ 已移除 |
+| `tags` | ≤ 10 个（建议用预定义标签） | ✅ 4 个 |
+| 所有文件编码 | 见上方表格 | ✅ 已用 `tools/fix_bom.py` 校验 |
+
+### 上传步骤（Paradox 启动器 v2）
+
+```
+1. 启动 Paradox Launcher（不用先进游戏）
+2. 左侧选「Mods」页
+3. 点「Upload a Mod」
+4. 从列表里选中「ZL - 大肥鱼天枢执政」
+5. 选择发布站台（Steam Workshop / Paradox Mods，可同时选）
+6. 填写描述（会显示在工坊页面，见下方草稿）
+7. 点「Upload Mod」
+8. 等待完成提示
+```
+
+上传成功后，启动器会往 `descriptor.mod` 里写入 `remote_file_id=`，
+并把 mod 复制到：
+
+```
+...\Steam\steamapps\workshop\content\281990\<remote_file_id>\
+```
+
+### 更新已上传的 mod
+
+**流程完全相同** —— 再走一次上面的步骤即可覆盖。
+注意：**第 6 步填写的描述会完全替换掉工坊页面上的旧描述**，
+所以更新时要重新粘贴完整描述。
+
+### 上传后
+
+- 到 [创意工坊页面](https://steamcommunity.com/app/281990/workshop/) →
+  右侧「Your Files」→「Files you've posted」找到你的 mod
+- 检查可见性是否为 **Public**（有时默认是 Friends Only）
+- 建议补上：截图、更新说明、以及 README 里的重要信息
+
+> ⚠️ **注意**：上传后如果你同时保留本地的 `.mod` 文件**并订阅**工坊版，
+> 官方 wiki 说"上传的版本很可能无法工作"。请二选一：
+> 要么保留本地版、要么只用工坊版（删掉 `mod\zl_unique_administrator.mod`）。
+
 
 ---
 
