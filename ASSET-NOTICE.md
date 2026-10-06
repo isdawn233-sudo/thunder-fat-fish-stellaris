@@ -4,7 +4,7 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 项目：ZL - 天枢执政 · 雷霆大肥鱼炸飞星海
-仓库：https://github.com/isdawn233/thunder-fat-fish-stellaris
+仓库：https://github.com/isdawn233-sudo/thunder-fat-fish-stellaris
 版本：1.0.0
 生效：2026 年
 
@@ -106,7 +106,7 @@
     你是生成该图的人、你是提示词作者、或该图涉及你的形象权），
     请在本仓库提交 Issue，作者会在 **72 小时内**移除或按要求调整。
 
-    ⇨ https://github.com/isdawn233/thunder-fat-fish-stellaris/issues
+    ⇨ https://github.com/isdawn233-sudo/thunder-fat-fish-stellaris/issues
 
 
 ──────────────────────────────────────────────────────────────────────────────
@@ -149,7 +149,7 @@
     若 DeepSeek 官方认为本 mod 的使用方式不妥，请提交 Issue，
     作者会在 **72 小时内**移除相关图形。
 
-    ⇨ https://github.com/isdawn233/thunder-fat-fish-stellaris/issues
+    ⇨ https://github.com/isdawn233-sudo/thunder-fat-fish-stellaris/issues
 
 
 ──────────────────────────────────────────────────────────────────────────────
@@ -187,7 +187,7 @@ Paradox Interactive 的最终用户许可协议与 mod 政策约束。
 六、联系方式 / Contact
 ──────────────────────────────────────────────────────────────────────────────
 
-  仓库 Issue：https://github.com/isdawn233/thunder-fat-fish-stellaris/issues
+  仓库 Issue：https://github.com/isdawn233-sudo/thunder-fat-fish-stellaris/issues
 
   权利人或任何第三方均可通过上述渠道提出：
     · 素材移除请求
