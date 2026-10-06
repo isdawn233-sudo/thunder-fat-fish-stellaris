@@ -7,7 +7,7 @@
 > 切换 **行政官 / 指挥官 / 科学家** 三种形态，每种形态都有完整的 10 级配装。
 
 [![Stellaris](https://img.shields.io/badge/Stellaris-v4.3.*-blue)](https://www.stellaris.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey)](LICENSE)
 
 ---
 
@@ -20,7 +20,8 @@
 - [兼容性](#兼容性)
 - [给 Mod 开发者的工具](#给-mod-开发者的工具)
 - [已知的技术坑](#已知的技术坑)
-- [许可证与美术声明](#许可证与美术声明)
+- [素材来源与署名](#素材来源与署名)
+- [许可证](#许可证)
 
 ---
 
@@ -386,12 +387,65 @@ effect = { hidden_effect = { owner = { country_event = { id = ... } } } }
 
 ---
 
-## 许可证与美术声明
+## 素材来源与署名
 
-- **代码与脚本**：MIT License（见 [LICENSE](LICENSE)）
-- **角色立绘**：非本项目原创，版权归原著作权人，仅作非商业粉丝用途
+### 角色立绘
 
-如果你是该美术作品的著作权人并希望移除，请提交 Issue。
+本 mod 使用的角色立绘是 **DeepSeek 娘 / 鲸鱼娘（whale maid）** ——
+DeepSeek 的社区拟人吉祥物。
+
+| 项目 | 内容 |
+|---|---|
+| **作品** | DeepSeek 小鲸鱼（大肥鱼）/ DeepSeek Whale Girl |
+| **原始来源** | <https://www.bilibili.com/opus/1231977657712771073> |
+| **许可证** | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) |
+| **本 mod 所做的修改** | 原图去白底、裁剪、亮度与饱和度调整、缩放为 500×323、编码为 DXT5 DDS |
+
+**原作者的著作权归其本人所有。** 本 mod 仅作**非商业**用途。
+
+如果你是该美术作品的著作权人，并希望我们调整署名方式或移除相关内容，
+请在本仓库提交 Issue，我们会立即处理。
+
+### 相关社区资源
+
+这个形象有配套的社区资源，一并致谢：
+
+- [DeepSeek Whale Girl LoRA 模型（Civitai）](https://civitai.red/models/2697171/deepseek-or-deepseek-whale-girl)
+- [deepseek-whalechan 角色设定规范与素材库（GitHub）](https://github.com/Neko3000/deepseek-whalechan)
+- [dsh-whale-maid-mascot 页面宠物插件](https://github.com/yefeng7531/dsh-whale-maid-mascot) —— 我就是从这里查到立绘的原始来源与授权
+
+### 其它素材
+
+| 素材 | 来源 | 授权 |
+|---|---|---|
+| DeepSeek 鲸鱼标志（用于帝国旗帜） | DeepSeek 官方 | 官方品牌标识，仅作指代用途 |
+| 原版游戏贴图（子职业图标等） | Paradox Interactive | Stellaris 游戏资源，未随本仓库分发 |
+
+---
+
+## 许可证
+
+本项目采用 **[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)**
+（署名-非商业性使用-相同方式共享 4.0 国际）许可协议，
+完整条款见 [LICENSE](LICENSE)。
+
+```
+SPDX-License-Identifier: CC-BY-NC-SA-4.0
+```
+
+**这意味着：**
+
+| | 说明 |
+|---|---|
+| ✅ **可以** | 自由使用、修改、再分发本 mod |
+| 📝 **署名** | 转载或二次创作时请注明本项目与原作者 |
+| 🚫 **非商业** | **不得**出售本 mod，或将其放在付费墙后 |
+| 🔁 **相同方式共享** | 基于本 mod 的衍生作品必须采用同样的 CC BY-NC-SA 4.0 协议 |
+
+> ⚠️ 注意：本 mod 采用 CC BY-NC-SA 4.0 的**主要原因是其中的角色立绘**
+> 采用该协议。如果你想以更宽松的协议（如 MIT）复用本仓库的**代码部分**
+> （`common/` `events/` `tools/` 等），请先移除立绘相关文件
+> （`gfx/models/portraits/`、`thumbnail.png`），再自行处理。
 
 ---
 
@@ -399,4 +453,6 @@ effect = { hidden_effect = { owner = { country_event = { id = ... } } } }
 
 - **Paradox Interactive** — Stellaris
 - 机制灵感来自原版**灰风（Gray / Distant Stars）**的形态切换设计
+- **DeepSeek 娘 / 鲸鱼娘**的创作者 — 立绘原作者
+
 
