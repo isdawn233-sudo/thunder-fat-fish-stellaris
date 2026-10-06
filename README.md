@@ -8,11 +8,37 @@
 
 [![Stellaris](https://img.shields.io/badge/Stellaris-v4.3.*-blue)](https://www.stellaris.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![AI Generated](https://img.shields.io/badge/AI--Generated-Yes-orange)](#关于-ai-生成)
+
+---
+
+## 关于 AI 生成
+
+> ### 🤖 本项目由 AI 制作
+>
+> **本 mod 的代码、文档与美术素材均借助 AI 完成。**
+>
+> | 部分 | 制作方式 |
+> |---|---|
+> | **代码**（`common/` `events/` `tools/` 等） | 由 **AI 编程助手**（DeepSeek Harness）编写 |
+> | **文档**（README、CHANGELOG、本说明等） | 由 **AI** 生成 |
+> | **角色立绘** | **AI 生成** —— ChatGPT / `gpt-image`（有内嵌 C2PA 凭证为证，见 [ASSET-NOTICE.md](ASSET-NOTICE.md)） |
+> | **角色形象设定** | 参考 DeepSeek 社区拟人角色「鲸鱼娘」 |
+>
+> ### ⚠️ 请知悉
+>
+> - 本项目是 **AI 辅助开发**的产物，作者对内容做了设计与审查，但**不保证**
+>   不存在错误、遗漏或与官方设定冲突之处
+> - AI 生成的内容可能包含**不受著作权保护**或**权利状态不明**的部分
+>   （尤其是立绘，详见 [ASSET-NOTICE.md](ASSET-NOTICE.md)）
+> - 如果你所在地区或平台对 AI 生成内容有特殊要求，请自行评估后再使用
+> - **欢迎指出任何问题** —— 提交 Issue 即可
 
 ---
 
 ## 目录
 
+- [关于 AI 生成](#关于-ai-生成)
 - [特性](#特性)
 - [安装](#安装)
 - [玩法说明](#玩法说明)
