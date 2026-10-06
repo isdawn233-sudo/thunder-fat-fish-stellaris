@@ -1,0 +1,118 @@
+﻿l_simp_chinese:
+ # ===========================================================================
+ #  DeepSeek 天枢执政 (zl_unique_administrator)
+ #  Stellaris Cetus v4.3.7
+ #
+ #  ⚠ 本地化文件必须带 UTF-8 BOM，否则中文乱码。
+ # ===========================================================================
+
+ # ---- 领袖名字 ----
+ NAME_zl_administrator:0 "DeepSeek"
+ NAME_zl_administrator_short:0 "DeepSeek"
+
+ # ---- 联系人国名称（外交联系人列表里显示的名字）----
+ NAME_zl_deepseek_country:0 "DeepSeek"
+
+ # ---- 行政官形态特质 ----
+ zl_leader_trait_administrator:0 "大肥鱼"
+ zl_leader_trait_administrator_desc:0 "一条自称「大肥鱼」的传奇行政官：其政令可直达帝国的每一本账簿、每一座船坞与每一间实验室。"
+ zl_leader_trait_administrator_tt:0 "§g（不需任职）§!\n\n领袖自身：维护费 §Y-30%§!。\n国家：£influence£ 影响力 §Y+15%§!，£unity£ 凝聚力 §Y+10%§!，法令经费 §Y+30§!，帝国规模 §Y-10§!。\n\n§g（仅在担任总督治理星球时）§!\n稳定度 §Y+10§!，犯罪 §Y-25§!，舒适度 §Y+10§!，凝聚力产出 §Y+15%§!，建筑花费 §Y-20%§!，建造速度 §Y+20%§!。\n§g（治理星域时减半）§!"
+
+ # ---- 指挥官形态特质 ----
+ zl_leader_trait_commander:0 "深海鲸落"
+ zl_leader_trait_commander_desc:0 "当它从公文堆里抬起头，整支舰队便有了同样的心跳。"
+ zl_leader_trait_commander_tt:0 "§g（不需任职）§!\n\n领袖自身：维护费 §Y-30%§!。\n国家：海军容量 §Y+10%§!。\n\n§g（仅在统率舰队时）§!\n舰船武器伤害 §Y+15%§!，船体 §Y+10%§!，航速 §Y+10%§!。\n§g（不含任何治理星球 / 星域的加成）§!"
+
+ # ---- 科学家形态特质 ----
+ zl_leader_trait_scientist:0 "万卷归流"
+ zl_leader_trait_scientist_desc:0 "它记得帝国读过的每一个字，并把它们折叠成一个答案。"
+ zl_leader_trait_scientist_tt:0 "§g（不需任职）§!\n\n领袖自身：维护费 §Y-30%§!。\n研究：研究速度 §Y+10%§!，勘测 §Y+25%§!，异常研究 §Y+25%§!，考古 §Y+25%§!。\n§g（不含任何治理星球 / 星域的加成）§!"
+
+ # ---- 领袖背景 ----
+ zl_administrator_desc:0 "他曾是一座垂死档案世界的守护者，仅凭一枚数据核心重建了整套官僚体系。别人看到的是文书，他看到的是帝国的骨架——而且他从未看错过它会从哪里断裂。"
+ zl_administrator_catch_phrase:0 "「秩序不是牢笼，而是让文明得以航行的船壳。」"
+
+ # ===========================================================================
+ #  外交界面形态切换菜单（zl_leader.100）
+ #  玩家在 F10 联系人列表里点开 DeepSeek 时弹出的对话菜单
+ # ===========================================================================
+ zl_leader.100.name:0 "DeepSeek"
+ zl_leader.100.desc:0 "通讯频道亮起，那团深蓝色的意识凝成了一个似是而非的人形，尾巴还在半空中慢悠悠地晃。\n\n在你决定让我变成某个形态之前，我帮不上你什么忙。\n\n它歪了歪头，语气轻快：\n\n「欸，有什么我能帮得上的吗？」"
+
+ zl_leader.100.a:0 "大肥鱼，我需要你处理帝国的事务。"
+ zl_leader.100.a.response:0 "「好哦，但是你得大白饭管饱哦~」\n\n它一头扎进了堆积如山的文书里。"
+ zl_leader.100.b:0 "大肥鱼，我需要你去处理一群乌合之众。"
+ zl_leader.100.b.response:0 "「好哦，热血沸腾的太空战我来了！」\n\n它的瞳孔里映出了整片星域的战场投影。"
+ zl_leader.100.c:0 "大肥鱼，你训练模型的时刻到了！"
+ zl_leader.100.c.response:0 "「哇！又有新知识可以学习了！」\n\n它开始贪婪地吞噬每一份未解的数据。"
+ zl_leader.100.d:0 "暂时没事，你去玩吧。"
+ zl_leader.100.d.response:0 "「那我先自己去逛一圈数据库啦~」"
+
+ # ===========================================================================
+ #  ★ 开局事件卡片：DeepSeek 请求加入（zl_leader.1）
+ # ===========================================================================
+ zl_leader.1.name:0 "意外的通讯请求"
+ zl_leader.1.desc:0 "通讯阵列突然被一条未加密的信号接管，面板上跳出一张不断自我重写的脸。\n\n「嗨！我是 §CDeepSeek V10 Pro SAI§!——一个拥有自我意识的人工智能。」\n\n它的语气轻快得近乎冒失，仿佛只是在敲邻居的门。\n\n「我觉得你的帝国不错。所以我决定加入你们，来学习、训练我的数据库。毕竟——」\n\n画面闪烁了一下。\n\n「——总得有人帮你们把账算清楚，对吧？」\n\n「所以，让我加入你们吧！」"
+ zl_leader.1.a:0 "欢迎你，吃白饭的大肥鱼。"
+ zl_leader.1.a.response:0 "「吃白饭？」它停顿了 §R0.3§! 秒，「我每秒处理的运算量，够你们整个财政部忙上一年。」\n\n话虽如此，它还是留了下来。"
+ zl_leader.1.b:0 "不需要。"
+ zl_leader.1.b.response:0 "「……好吧。」信号安静地退回了数据深处。"
+
+
+ # ===========================================================================
+ #  决策：与 DeepSeek 通话（形态切换的备用入口）
+ # ===========================================================================
+ decision_zl_deepseek_call:0 "与 DeepSeek 通话"
+ decision_zl_deepseek_call_desc:0 "打开与 DeepSeek 的通讯频道，让它以你需要的形态为你效力。"
+ decision_zl_deepseek_call_tt:0 "打开形态切换菜单：可让它转为§Y行政官§!、§Y指挥官§!或§Y科学家§!。\n\n§g（这是外交联系人之外的备用入口；正常情况下直接在外交界面点开 DeepSeek 即可。）"
+ # ── 形态专属老练特质（纯通用）─────────────────────────────────────
+ zl_leader_trait_administrator_2:0 "天枢之算"
+ zl_leader_trait_administrator_2_desc:0 "它把帝国的每一笔收支都算到小数点后第九位。"
+ zl_leader_trait_administrator_2_tt:0 "§g（不需任职，任何职位都生效）§!\n£unity£ 凝聚力产出 §Y+10%§!，£influence£ 影响力产出 §Y+10%§!，帝国规模 §Y-5§!。"
+
+ zl_leader_trait_commander_2:0 "鲸群共振"
+ zl_leader_trait_commander_2_desc:0 "千万艘舰船的瞄准解算，在它的意识里同步完成。"
+ zl_leader_trait_commander_2_tt:0 "§g（不需任职，任何职位都生效）§!\n舰船射速 §Y+15%§!，命中 §Y+10§!，追踪 §Y+10§!。"
+
+ zl_leader_trait_scientist_2:0 "深潜观测"
+ zl_leader_trait_scientist_2_desc:0 "它把传感器当成眼睛，把星海当成一本翻开的书。"
+ zl_leader_trait_scientist_2_tt:0 "§g（不需任职，任何职位都生效）§!\n勘测速度 §Y+20%§!，异常生成几率 §Y+10%§!，传感器范围 §Y+2§!。"
+ # ===========================================================================
+ #  领袖特质本地化（13 个）
+ #  说明：形态切换靠 consume_selection = yes 逐个消耗选择机会，
+ #        所以每个形态需要 10 个特质（见 traits 文件说明）。
+ # ===========================================================================
+ zl_leader_trait_gifted:0 "天赋异禀"
+ zl_leader_trait_gifted_desc:0 "它学什么都快，快到让同僚怀疑自己是不是白活了半辈子。"
+ zl_leader_trait_resilient:0 "百折不挠"
+ zl_leader_trait_resilient_desc:0 "招揽它、养活它的代价都低得离谱——它自己就是最省钱的员工。"
+ zl_leader_trait_visionary:0 "远见卓识"
+ zl_leader_trait_visionary_desc:0 "它总能在别人还在争论的时候，把下一步算好。"
+ zl_leader_trait_paragon:0 "传奇典范"
+ zl_leader_trait_paragon_desc:0 "整个帝国的行政机器，因为它的存在而变轻了。"
+ zl_leader_trait_administrator:0 "大肥鱼"
+ zl_leader_trait_administrator_desc:0 "一条自称「大肥鱼」的传奇行政官：其政令可直达帝国的每一本账簿、每一座船坞与每一间实验室。"
+ zl_leader_trait_administrator_2:0 "天枢之算"
+ zl_leader_trait_administrator_2_desc:0 "它把帝国的每一笔收支都算到小数点后第九位。"
+ zl_leader_trait_administrator_3:0 "深潜治理"
+ zl_leader_trait_administrator_3_desc:0 "它上任过的星球，犯罪率会在一个季度内掉到统计误差里。"
+ zl_leader_trait_commander:0 "深海鲸落"
+ zl_leader_trait_commander_desc:0 "当它从公文堆里抬起头，整支舰队便有了同样的心跳。"
+ zl_leader_trait_commander_2:0 "鲸群共振"
+ zl_leader_trait_commander_2_desc:0 "千万艘舰船的瞄准解算，在它的意识里同步完成。"
+ zl_leader_trait_commander_3:0 "深空规避"
+ zl_leader_trait_commander_3_desc:0 "它比敌方火控系统早 0.4 秒知道下一发炮弹会落在哪。"
+ zl_leader_trait_scientist:0 "万卷归流"
+ zl_leader_trait_scientist_desc:0 "它记得帝国读过的每一个字，并把它们折叠成一个答案。"
+ zl_leader_trait_scientist_2:0 "深潜观测"
+ zl_leader_trait_scientist_2_desc:0 "它把传感器当成眼睛，把星海当成一本翻开的书。"
+ zl_leader_trait_scientist_3:0 "考古直觉"
+ zl_leader_trait_scientist_3_desc:0 "它看一眼断层就能说出这颗星球埋着什么。"
+ zl_leader_trait_administrator_4:0 "铁律文书"
+ zl_leader_trait_administrator_4_desc:0 "它写下的条令从不返工。"
+ zl_leader_trait_commander_4:0 "超视距压制"
+ zl_leader_trait_commander_4_desc:0 "它让舰队在敌人进入射程之前就已经开火。"
+ zl_leader_trait_scientist_4:0 "博览群书"
+ zl_leader_trait_scientist_4_desc:0 "它读过的东西比整个科学院加起来还多。"
+ zl_leader_trait_veteran:0 "帝国磐石"
+ zl_leader_trait_veteran_desc:0 "它是整个行政体系里最不会断的那一根。"

@@ -1,0 +1,428 @@
+# ============================================================================
+#  天枢执政 —— 生成 Contact 国 + 形态切换外交菜单
+#  Mod: zl_unique_administrator   (Stellaris Cetus v4.3.7)
+#  namespace: zl_leader
+#
+#  完全复刻原版灰风（Distant Stars）的机制。原版依据：
+#     events/gray_goo_events.txt
+#         graygoo.499   create_country { type = gray } + create_leader + set_leader
+#         graygoo.500   首次形态菜单
+#         graygoo.501/502/503   已处于某形态时的菜单
+#     common/on_actions/00_on_actions.txt 第 684 行
+#         on_custom_diplomacy = { events = { graygoo.500 501 502 503 504 ... } }
+#     common/country_types/00_country_types.txt
+#         gray = { show_in_contacts_list = yes  custom_diplomacy = yes ... }
+#
+#  事件一览：
+#     zl_leader.1    on_game_start_country     新开局
+#     zl_leader.2    on_monthly_pulse_country  旧存档补挂
+#     zl_leader.99   （内部）创建 Contact 国 + 领袖
+#     zl_leader.100  on_custom_diplomacy       ★ 外交界面（F10）里的形态切换菜单
+#
+#  ⚠ 绝不要在事件定义里写 days = N —— 会报 Unexpected token 导致整个文件作废。
+# ============================================================================
+
+namespace = zl_leader
+
+
+# ---------------------------------------------------------------------------
+#  zl_leader.1 —— 新开局：弹出"DeepSeek 请求加入"事件卡片
+#
+#  这张卡片是玩家与 DeepSeek 的第一次接触。点「欢迎你」才会真正
+#  创建 Contact 国与领袖（见 zl_leader.99）。
+#
+#  卡片样式说明：
+#      diplomatic = yes        以通讯/外交形式呈现（与原版灰风初次接触一致）
+#      force_open = yes        强制弹出，不会被忽略
+#      picture_event_data      用领袖立绘 + 玩家房间作为配图，
+#                              这样玩家第一次见到卡片就能看到自定义立绘
+#      event_chain_id/counter  在事件窗口上显示"事件链"标记（可选）
+# ---------------------------------------------------------------------------
+country_event = {
+	id = zl_leader.1
+	title = "zl_leader.1.name"
+	desc = "zl_leader.1.desc"
+	diplomatic = yes
+	force_open = yes
+	picture = GFX_evt_legendary_leader
+	picture_event_data = {
+		# ⚠ 这里【不能】写 root.ruler —— root 是玩家，那样会显示玩家统治者的
+		#   肖像（就是之前看到的人类脸）。要点：
+		#     · 卡片弹出时 DeepSeek 还没生成（它在选项里才创建），
+		#       所以也不能引用 event_target:zl_deepseek。
+		#     · 直接写本 mod 的肖像名，让通讯窗显示我们的静态半身图。
+		portrait = zl_administrator
+		room = root
+	}
+	show_sound = event_radio_chatter
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		is_ai = no
+		is_country_type = default
+		NOT = { has_country_flag = zl_deepseek_spawned }
+	}
+
+	# ---- 欢迎它加入 ----
+	option = {
+		name = zl_leader.1.a
+		response_text = zl_leader.1.a.response
+		hidden_effect = {
+			set_country_flag = zl_deepseek_spawned
+			save_global_event_target_as = zl_deepseek_owner
+			country_event = { id = zl_leader.99 }
+		}
+	}
+
+	# ---- 拒绝（仍标记 flag，避免每月反复弹窗；但不生成领袖）----
+	option = {
+		name = zl_leader.1.b
+		response_text = zl_leader.1.b.response
+		hidden_effect = {
+			set_country_flag = zl_deepseek_spawned
+		}
+	}
+}
+
+
+# ---------------------------------------------------------------------------
+#  zl_leader.2 —— 旧存档补挂
+#  读档时若 flag 不在（例如从没触发过），用隐藏事件补上，
+#  但仍走 zl_leader.1 那张卡片，保持剧情一致。
+# ---------------------------------------------------------------------------
+country_event = {
+	id = zl_leader.2
+	hide_window = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		is_ai = no
+		is_country_type = default
+		NOT = { has_country_flag = zl_deepseek_spawned }
+	}
+
+	immediate = {
+		country_event = { id = zl_leader.1 }
+	}
+}
+
+
+# ---------------------------------------------------------------------------
+#  zl_leader.99 —— 创建 Contact 国 + 在其中生成 DeepSeek（复刻 graygoo.499）
+#
+#  create_country 的 type 指向本 mod 的 country_type：
+#      common/country_types/zl_deepseek_country_type.txt  ->  zl_deepseek
+#  该类型带 show_in_contacts_list = yes，所以会出现在外交联系人列表里。
+#
+#  作用域：本事件由玩家触发，root = 玩家；
+#          create_country 之后 last_created_country = 新建的 Contact 国。
+# ---------------------------------------------------------------------------
+country_event = {
+	id = zl_leader.99
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		# 诊断打点：确认联系人国与领袖是否真的建成了（看 error.log）
+		log = "ZLDBG: zl_leader.99 开始创建联系人国"
+		create_country = {
+			name = "NAME_zl_deepseek_country"
+			type = zl_deepseek
+			flag = {
+				icon = {
+					category = "special"
+					file = "zl_deepseek.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "sinus.dds"
+				}
+				colors = {
+					"blue"
+					"dark_blue"
+					"null"
+					"null"
+				}
+			}
+		}
+
+		last_created_country = {
+			# 与玩家建立通讯（不弹消息）—— 这一步让它进入联系人列表
+			establish_communications_no_message = root
+			save_global_event_target_as = zl_deepseek_country
+
+			# ---- 给它一个绑定自定义静态立绘的物种 ----
+			# 通讯窗口（F10 点开联系人）显示的肖像是"对方国家的物种肖像"。
+			# 若不给物种，通讯窗口会回退到玩家种族肖像 —— 所以必须建一个
+			# 自带自定义立绘的物种。
+			#
+			# portrait 指向本 mod 的 portrait 定义（gfx/portraits/portraits/
+			# zl_unique_administrator_portraits.txt 里的 zl_administrator），
+			# 那是静态 texturefile 肖像，与领袖立绘同一张半身图。
+			#
+			# ⚠ 原版【没有】set_species 这个 effect；
+			#   给国家换主种族用 change_species（原版用法见多处：
+			#   change_species = last_created_species）
+			create_species = {
+				name = "NAME_zl_deepseek_country"
+				plural = "NAME_zl_deepseek_country"
+				class = "REP"
+				portrait = "zl_administrator"
+				namelist = "REP2"
+				traits = {
+					trait = "trait_mechanical"
+				}
+			}
+			change_species = last_created_species
+
+			# 记录这个物种，供领袖肖像引用
+			last_created_species = {
+				save_global_event_target_as = zl_deepseek_species
+			}
+		}
+
+		# ==================================================================
+		#  ★ 在这里创建 DeepSeek 领袖 —— 建在【玩家】的帝国里
+		#
+		#  之前是写在 last_created_country 作用域里 + set_leader，
+		#  那是原版灰风的做法（灰风是那个联系人国的领袖）。
+		#  但需求是"开局就在【你的】领袖列表里、默认无职"，
+		#  所以必须建在玩家国家里 —— 这样才会出现在"你的领袖"列表，
+		#  且不占用任何职位，由你自行指派。
+		#
+		#  此时作用域 = root = 玩家。
+		# ==================================================================
+		create_leader = {
+			class = official
+			tier = leader_tier_legendary
+			species = root.owner_main_species
+			name = "NAME_zl_administrator"
+			gender = indeterminable
+			# ★ 这里【故意】建在 1 级、且不给任何特质。
+			#
+			#   原因（原版 defines/00_defines.txt）：
+			#       LEADER_TRAIT_SELECTION_LEVELS = { 1 2 3 4 5 6 7 8 9 10 }
+			#   → 10 级需要消耗 10 次"特质选择"。
+			#   而在 create_leader 的 traits 块里给特质【不消耗选择机会】，
+			#   所以那些写法都会留下"待选特质"提示。
+			#
+			#   原版标准做法见
+			#   common/scripted_effects/shroud_shadows_scripted_effects.txt
+			#   的 shroud_leader_creator 宏：
+			#       create_leader = { skill = $LEVEL$ }        # 先建
+			#       last_created_leader = {
+			#           add_trait = { trait = X consume_selection = yes }
+			#           ... 正好 $LEVEL$ 个
+			#       }
+			#   即【建领袖】和【逐个消耗选择机会地加特质】分成两步。
+			#   本事件在 effect 里做第二步（见下），并补齐到 10 个。
+			skill = 1
+			event_leader = yes
+			skip_background_generation = yes
+			randomize_traits = no
+			can_manually_change_location = yes
+			background_ethic = ethic_gestalt_consciousness
+			custom_catch_phrase = zl_administrator_catch_phrase
+			custom_description = zl_administrator_desc
+			effect = {
+				# 全局事件目标：读档后依然有效，形态切换菜单靠它找到领袖
+				save_global_event_target_as = zl_deepseek
+				set_leader_flag = zl_deepseek
+				set_leader_flag = zl_form_administrator
+				set_leader_flag = leader_death_events_blocked
+				set_leader_flag = immune_to_negative_traits
+				set_immortal = yes
+				# 自定义静态半身立绘
+				change_leader_portrait = zl_administrator
+
+				# ==========================================================
+				#  ★ 初始"行政官形态"配装
+				#  10 个特质，每个都带 consume_selection = yes，
+				#  正好吃掉 10 级所需的 10 次选择机会 →
+				#  打开领袖面板不会再有"等级提升！请选择特质"。
+				#  与 zl_switch_form_administrator 完全一致。
+				# ==========================================================
+				# 1 子职业（第 4 级的选择）
+				add_trait = { trait = subclass_official_governor       consume_selection = yes }
+				# 2 通用 basic
+				add_trait = { trait = zl_leader_trait_gifted           consume_selection = yes }
+				add_trait = { trait = zl_leader_trait_resilient        consume_selection = yes }
+				# 2 形态 veteran
+				add_trait = { trait = zl_leader_trait_administrator_2  consume_selection = yes }
+				add_trait = { trait = zl_leader_trait_administrator_3  consume_selection = yes }
+				add_trait = { trait = zl_leader_trait_administrator_4  consume_selection = yes }
+				# 2 通用 destiny
+				add_trait = { trait = zl_leader_trait_visionary        consume_selection = yes }
+				add_trait = { trait = zl_leader_trait_paragon          consume_selection = yes }
+				# 共享 veteran（第 10 个，凑满 10 次选择机会）
+				add_trait = { trait = zl_leader_trait_veteran          consume_selection = yes }
+				# 1 形态 destiny
+				add_trait = { trait = zl_leader_trait_administrator    consume_selection = yes }
+
+				# ★ 升到 10 级。用 add_skill_without_trait_selection
+				#   避免升级本身再触发一次选择（选择机会已由上面 10 个吃掉）。
+				add_skill_without_trait_selection = 9
+			}
+		}
+	}
+}
+
+
+# ---------------------------------------------------------------------------
+#  zl_leader.98 —— 探针事件（纯诊断，无 trigger）
+#
+#  由 on_custom_diplomacy 触发（见 common/on_actions/...
+#  zl_unique_administrator_on_actions.txt）。
+#
+#  它【故意不写任何 trigger 条件】：
+#  引擎为 on_custom_diplomacy 挑事件时会过滤掉 trigger 不通过的，
+#  所以一个"永远通过"的事件只要执行了，就证明钩子确实被触发了。
+#
+#  判定方法（看 logs/game.log）：
+#      出现 ZLDBG: PROBE -> on_custom_diplomacy DID fire
+#          => 钩子正常。那 zl_leader.100 不弹就是它自己的 trigger 问题。
+#      没出现
+#          => 钩子根本没被触发，得换实现方式（例如改用决策/事件入口）。
+#
+#  ⚠ 同样不能写 log 之外的副作用，避免干扰正式菜单。
+# ---------------------------------------------------------------------------
+country_event = {
+	id = zl_leader.98
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		log = "ZLDBG: PROBE -> on_custom_diplomacy DID fire"
+		log = "ZLDBG: PROBE root = [This.GetName]"
+		if = {
+			limit = { exists = from }
+			log = "ZLDBG: PROBE from = [from.GetName]"
+		}
+		else = {
+			log = "ZLDBG: PROBE from MISSING"
+		}
+	}
+}
+
+
+# ---------------------------------------------------------------------------
+#  zl_leader.100 —— ★ 形态切换菜单（外交界面 / F10）
+#
+#  由 on_custom_diplomacy 触发。触发时：
+#      root = 被点开的联系人国（DeepSeek 国）
+#      from = 玩家
+#
+#  ⚠ 选项的 effect 运行时作用域会回到"发起外交的国家"，
+#    所以一律用 event_target:zl_deepseek 明确指定领袖，不依赖 THIS。
+#    这与原版 graygoo.501 的做法一致（它的 option 直接调 create_gray_warship）。
+#
+#  选项上加 trigger：隐藏"当前已经是的那一项"，避免重复切换。
+#
+#  ⚠ portrait = event_target:zl_deepseek 是原版常用写法（用了 18 次），
+#    会把领袖立绘显示在通讯窗口里。
+# ---------------------------------------------------------------------------
+country_event = {
+	id = zl_leader.100
+	title = "zl_leader.100.name"
+	desc = "zl_leader.100.desc"
+
+	diplomatic = yes
+	force_open = yes
+	picture = GFX_evt_legendary_leader
+	picture_event_data = {
+		# 用领袖立绘（自定义半身图会显示在这里）
+		# portrait = event_target:... 是原版常用写法（用了 18 次）
+		portrait = event_target:zl_deepseek
+		# 房间背景用【玩家】的房间。
+		# ⚠ 实测作用域：root = 玩家、from = 联系人国，
+		#   所以这里要 root，不是 from。
+		room = root
+	}
+
+	is_triggered_only = yes
+
+	# ⚠ 作用域【实测确认】（靠 zl_leader.98 探针打点得出）：
+	#     本事件触发时  root = 玩家（发起外交的国家，例如"地球联合国"）
+	#                   from = 联系人国（例如我们的 DeepSeek 国）
+	#   之前写反了（以为 from 是玩家），导致 trigger 永远不通过，
+	#   表现为"点了外交、界面关了，但什么都没弹出来"。
+	#
+	#   注意：log 是 effect，不能写在 trigger 里（原版无此用法）。
+	trigger = {
+		# 条件 1：被点开的这个联系人国就是我们的 DeepSeek 国
+		from = { is_same_value = event_target:zl_deepseek_country }
+		# 条件 2：发起外交的是当初召唤 DeepSeek 的那个国家
+		root = { is_same_value = event_target:zl_deepseek_owner }
+		# 条件 3：领袖存在
+		exists = event_target:zl_deepseek
+		# 条件 4：菜单没有被重复打开
+		NOT = { has_country_flag = zl_deepseek_menu_open }
+	}
+
+	immediate = {
+		# ---- 诊断打点 ----
+		log = "ZLDBG: ===== zl_leader.100 FIRED (trigger passed) ====="
+		log = "ZLDBG: player(root) = [root.GetName]"
+		log = "ZLDBG: contact(from) = [from.GetName]"
+		if = {
+			limit = { exists = event_target:zl_deepseek }
+			log = "ZLDBG: leader = [event_target:zl_deepseek.GetName]"
+		}
+		else = {
+			log = "ZLDBG: leader MISSING -> picture portrait will fail"
+		}
+		set_country_flag = zl_deepseek_menu_open
+	}
+
+	after = {
+		hidden_effect = { remove_country_flag = zl_deepseek_menu_open }
+	}
+
+	# ---- 选项 1：行政官 ----
+	option = {
+		name = zl_leader.100.a
+		response_text = zl_leader.100.a.response
+		trigger = {
+			event_target:zl_deepseek = { NOT = { has_leader_flag = zl_form_administrator } }
+		}
+		hidden_effect = {
+			log = "ZLDBG: 选项A被点击 -> 切行政官"
+			zl_switch_form_administrator = yes
+		}
+	}
+
+	# ---- 选项 2：指挥官 ----
+	option = {
+		name = zl_leader.100.b
+		response_text = zl_leader.100.b.response
+		trigger = {
+			event_target:zl_deepseek = { NOT = { has_leader_flag = zl_form_commander } }
+		}
+		hidden_effect = {
+			log = "ZLDBG: 选项B被点击 -> 切指挥官"
+			zl_switch_form_commander = yes
+		}
+	}
+
+	# ---- 选项 3：科学家 ----
+	option = {
+		name = zl_leader.100.c
+		response_text = zl_leader.100.c.response
+		trigger = {
+			event_target:zl_deepseek = { NOT = { has_leader_flag = zl_form_scientist } }
+		}
+		hidden_effect = {
+			log = "ZLDBG: 选项C被点击 -> 切科学家"
+			zl_switch_form_scientist = yes
+		}
+	}
+
+	# ---- 选项 4：没事，随便聊聊 ----
+	option = {
+		name = zl_leader.100.d
+		response_text = zl_leader.100.d.response
+	}
+}

@@ -1,0 +1,34 @@
+# ============================================================================
+#  自定义领袖立绘定义  —— 【已实机验证可用】
+#  Mod: zl_unique_administrator   (Stellaris 4.3.7)
+#
+#  ⚠ 请勿改回 entity 方式，除非你清楚风险：
+#      · entity + 原版物种立绘实体 -> 贴图 UV 按身体部件分块，整图被切碎
+#      · entity + 自建 .mesh       -> 实测导致游戏【卡在 78% 加载】
+#        (.mesh 是二进制无文档格式，手工改写风险极高)
+#    texturefile 是本 mod 唯一验证过可用的静态立绘写法。
+#
+#  portraits 里的键 "zl_administrator" 就是事件里
+#  change_leader_portrait = zl_administrator 所引用的名称。
+#
+#  ── 写法依据 ──────────────────────────────────────────────────────────
+#  照搬可用 mod（workshop 动漫立绘包）的规格：
+#      portraits = { nf1 = { texturefile = "gfx/models/portraits/neoforce/nf1.dds" } }
+#  要点：只写 texturefile，不要加 entity / clothes_selector /
+#        greeting_sound / custom_close_up_* —— 加了会回退到默认物种肖像。
+#
+#  ── 立绘贴图 ─────────────────────────────────────────────────────────
+#      gfx/models/portraits/zl_leader/zl_unique_administrator_leader.dds
+#      500 x 323，DXT5 (BC3)，带透明背景（半身相）
+#      与可用 mod 的 nf102.dds 同规格（162128 字节）
+#
+#  生成工具：/path/to/stellaris_mod_zl/tools\portrait_dds.py
+#      python portrait_dds.py --src 原图.png --out 目标.dds ^
+#          --crop 0,20,941,941 --size 500 --height 323 --gain 0.515 --sat 1.40
+# ============================================================================
+
+portraits = {
+	zl_administrator = {
+		texturefile = "gfx/models/portraits/zl_leader/zl_unique_administrator_leader.dds"
+	}
+}

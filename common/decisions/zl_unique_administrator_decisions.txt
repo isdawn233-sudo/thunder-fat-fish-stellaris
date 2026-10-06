@@ -1,0 +1,61 @@
+# ============================================================================
+#  天枢执政 —— 形态切换决策
+#  Mod: zl_unique_administrator   (Stellaris Cetus v4.3.7)
+#
+#  入口之一（另一个是 F10 外交联系人）：
+#      政治 → 决策 → 「与 DeepSeek 通话」→ 弹出 zl_leader.100 形态菜单。
+#
+#  ── 作用域踩坑记录（两个都是实测出来的）──────────────────────────────
+#  本决策没有 owned_planets_only，于是 potential 会在【全银河每个星球】
+#  上评估一次，包括无主星球。所以：
+#
+#     x potential 里写 owner = { ... }
+#         -> Script Error: Invalid context switch [owner] from <planet>
+#            会刷满日志（每个星球一条）
+#
+#     x effect 里直接写 country_event = { ... }
+#         -> Wrong scope for effect 'country_event'
+#            因为决策执行时作用域是星球
+#
+#  正确做法：
+#     potential 不做作用域切换（保持 always = yes）
+#     effect 里先 owner = { ... } 进国家再触发国家事件
+#  原版范例：02_special_decisions.txt 的 decision_entrap_shroud_entity
+#
+#  ── 决策合法顶层字段（实测自原版 849 个决策）────────────────────────
+#      potential / effect / icon / resources / ai_weight / allow
+#      enactment_time / sound / on_queued / on_unqueued / abort_trigger
+#      abort_effect / prerequisites / custom_tooltip
+#      注意：没有 cooldown 字段
+# ============================================================================
+
+decision_zl_deepseek_call = {
+	# 不要写 owned_planets_only，否则只能在选中星球时出现。
+	# 图标用原版已有的 gfx/interface/icons/decisions/decision_politics.dds
+	icon = decision_politics
+
+	resources = {
+		category = decisions
+		cost = { }
+	}
+
+	# 不做作用域切换（原因见文件头注释）
+	potential = {
+		always = yes
+	}
+
+	effect = {
+		custom_tooltip = decision_zl_deepseek_call_tt
+		hidden_effect = {
+			# 决策执行时作用域是星球 -> 必须先 owner 进国家
+			owner = {
+				country_event = { id = zl_leader.100 }
+			}
+		}
+	}
+
+	# AI 永不使用（玩家专属功能）
+	ai_weight = {
+		weight = 0
+	}
+}

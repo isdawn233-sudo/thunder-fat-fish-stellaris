@@ -1,0 +1,44 @@
+# ============================================================================
+#  自定义领袖特性图标 sprite
+#  Mod: zl_unique_administrator
+#
+#  ── 原版特性图标的规格（实测自 legendary_leader.dds / eager.dds）────────
+#      尺寸  29 x 29
+#      格式  DXT5 (BC3)，带 mipmap
+#      内容  【纯黑图形】+ 透明背景
+#
+#  为什么是纯黑：
+#      引擎用 layer 的 color 对图标做【乘法】上色。
+#      原版颜色定义（common/named_colors/01_trait_colors.txt）：
+#          trait_icon_default = { color = { 0 0 0 191 } }
+#      黑色 × 任何颜色 = 黑，所以原版图标本身就是黑的，
+#      实际显示的颜色由引擎处理。
+#
+#  底板 / 稀有度光晕 / 边框 / 议会标记【不是】图标的一部分，
+#  由引擎按 common/inline_scripts/trait/icon.txt 分层叠加：
+#      layer { icon = "GFX_trait_bg" }              <- 底板
+#      layer { icon = "GFX_trait_glow_destiny" }    <- paragon 光晕
+#      layer { icon = "GFX_trait_frame_destiny" }   <- paragon 边框
+#      layer { icon = $ICON$ }                      <- 本图标（内层图形）
+#      layer { icon = "GFX_trait_councilor" }       <- 议会标记
+#
+#  所以本图标【只画图形】，不要画圆圈底板或外框 —— 画了就是重复叠加。
+#
+#  ── 当前使用 ─────────────────────────────────────────────────────────
+#      gfx/interface/icons/traits/zl_leader_trait_administrator.dds
+#      29 x 29 DXT5，鱼形剪影（呼应特性名「大肥鱼」/ Big Fat Fish）
+#
+#  ── 想换图形 ─────────────────────────────────────────────────────────
+#  生成工具：/path/to/stellaris_mod_zl/tools\make_trait_icon.py
+#      python make_trait_icon.py --out 目标.dds --glyph fish
+#  可选图形：fish（鱼） / pillar（立柱） / seal（印环） / star（星）
+#
+#  换完必须完全退出游戏再进。
+# ============================================================================
+
+spriteTypes = {
+	spriteType = {
+		name = "GFX_leader_trait_zl_administrator"
+		texturefile = "gfx/interface/icons/traits/zl_leader_trait_administrator.dds"
+	}
+}

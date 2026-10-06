@@ -1,0 +1,56 @@
+# ============================================================================
+#  天枢执政 —— on_action 钩子
+#  Mod: zl_unique_administrator   (Stellaris Cetus v4.3.7)
+#
+#  ── 三个钩子 ──────────────────────────────────────────────────────────
+#    on_game_start_country    新开局：创建 Contact 国 + 生成领袖
+#    on_monthly_pulse_country 旧存档兜底补挂（flag 防重复）
+#    on_custom_diplomacy      点开外交联系人时触发 —— 形态切换菜单的来源
+#
+#  ── on_custom_diplomacy 说明（复刻原版灰风）──────────────────────────
+#  原版 common/on_actions/00_on_actions.txt 第 684 行：
+#
+#      on_custom_diplomacy = {
+#          events = {
+#              ...
+#              graygoo.500      # 灰风形态菜单（初始）
+#              graygoo.501      # 已处于"行政官"形态时的菜单
+#              graygoo.502
+#              graygoo.503
+#              graygoo.504
+#          }
+#      }
+#
+#  当玩家点开一个 custom_diplomacy = yes 的联系人时，游戏会从这个 events
+#  列表里挑出【trigger 通过】的事件，当作外交菜单显示。
+#  本 mod 的 country_type（zl_deepseek_country_type.txt）设了
+#  custom_diplomacy = yes，所以只要把菜单事件加进这个列表即可。
+#
+#  ⚠ on_action 的 events 列表是【追加】语义，不需要覆盖原版文件。
+# ============================================================================
+
+on_game_start_country = {
+	events = {
+		zl_leader.1
+	}
+}
+
+on_monthly_pulse_country = {
+	events = {
+		zl_leader.2
+	}
+}
+
+on_custom_diplomacy = {
+	events = {
+		# ── 探针事件（纯诊断）────────────────────────────────────────────
+		# zl_leader.98 没有任何 trigger 条件，所以只要 on_custom_diplomacy
+		# 真的被触发，它必然会被挑中并执行 —— 从而在 game.log 里留下
+		#     ZLDBG: PROBE -> on_custom_diplomacy DID fire
+		# 如果点了外交却看不到这行，就证明钩子本身没触发；
+		# 如果看到了这行但 zl_leader.100 没反应，就是它的 trigger 没过。
+		zl_leader.98
+		# ── 正式的形态切换菜单 ──────────────────────────────────────────
+		zl_leader.100
+	}
+}

@@ -1,0 +1,46 @@
+MIT License
+
+Copyright (c) 2026 雷霆大肥鱼炸飞星海 (ZL - 天枢执政)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+===============================================================================
+附加说明 / Additional Notice — 美术资源 / Art Assets
+===============================================================================
+
+本许可证（MIT）仅覆盖本仓库中的【代码与脚本】部分，即：
+    common/  events/  gfx/portraits/  interface/  localisation/
+    tools/   以及各 .md 文档
+
+本 mod 使用的【角色立绘 / 角色形象】并非本项目原创，
+其版权归原著作权人所有，仅作为非商业的粉丝二次创作使用。
+
+The MIT license above covers ONLY the code and scripts in this repository
+(the Stellaris mod definition files under common/, events/, gfx/, interface/,
+localisation/, plus the tools/ directory and documentation).
+
+The character artwork/portrait used by this mod is NOT original work of this
+project. Copyright belongs to its respective owner(s). It is used here only
+as non-commercial fan content.
+
+如果你是该美术作品的著作权人并希望我们移除相关内容，
+请在本仓库提交 Issue，我们会立即处理。
+
+If you are the copyright holder of that artwork and wish it to be removed,
+please open an Issue in this repository and we will act on it immediately.

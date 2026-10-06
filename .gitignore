@@ -1,0 +1,37 @@
+# ── Stellaris / Paradox 启动器与本机状态 ─────────────────────────────
+# 这些文件是每台机器自己的，绝对不能提交
+*.log
+logs/
+crashes/
+dlc_load.json
+launcher-v2.sqlite
+settings.txt
+
+# ── 本机备份（我在开发过程里产生的）─────────────────────────────────
+*.bak
+*.bak-*
+*_backup/
+*before-*
+
+# ── Python ───────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# ── 编辑器 / 系统 ────────────────────────────────────────────────────
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ── 本机专属描述文件（含绝对路径，每台机器都不同）────────────────────
+# 仓库里只保留 *.template，用户克隆后自己改 path
+descriptor.mod
+zl_unique_administrator.mod
+../zl_unique_administrator.mod
+
+# ── 打包产物 ─────────────────────────────────────────────────────────
+*.zip
+dist/

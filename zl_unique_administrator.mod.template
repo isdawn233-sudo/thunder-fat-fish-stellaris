@@ -1,0 +1,10 @@
+version="1.0.0"
+tags={
+	"Gameplay"
+	"Leaders"
+	"Character"
+}
+name="ZL - 天枢执政 · 雷霆大肥鱼炸飞星海"
+picture="thumbnail.png"
+supported_version="v4.3.*"
+path="C:/Users/YOUR_USERNAME/Documents/Paradox Interactive/Stellaris/mod/zl_unique_administrator"

@@ -1,0 +1,59 @@
+# ============================================================================
+#  天枢执政 —— 自定义"联系人国"（复刻原版灰风的 gray country_type）
+#  Mod: zl_unique_administrator   (Stellaris Cetus v4.3.7)
+#
+#  ── 为什么需要一个国家？──────────────────────────────────────────────
+#  需求是"像原版灰风一样，能在外交界面（F10）里点开切换形态"。
+#  Stellaris 的 .gui 按钮没有 onclick 字段、行为由 C++ 按名字硬绑定，
+#  也不存在 scripted_gui —— 所以【无法】直接给外交界面加按钮。
+#
+#  原版灰风的做法是：给灰风建一个"联系人国"，让它出现在外交联系人列表里，
+#  再用 contact_rule = on_action_only + on_action 触发外交形式的事件菜单。
+#  本 mod 照搬这套机制。
+#
+#  原版依据： common/country_types/00_country_types.txt 里的 gray = { ... }
+#
+#  ── 关键字段说明 ─────────────────────────────────────────────────────
+#    show_in_contacts_list = yes        出现在外交联系人列表（"像国家一样"）
+#    minimalist_contacts_list_profile   联系人列表用精简档案
+#    share_communications  = no         不共享通讯（不去获取它的通讯）
+#    default_ships         = no         不需要默认舰船
+#    government            = no         没有政府
+#    uses_origins          = no         没有起源
+#    ai = { enabled = no }              不接受 AI 控制
+#    faction = { auto_delete = no }     不被自动清理
+#    custom_diplomacy      = yes        使用自定义外交（菜单来自事件）
+#    modules.exclusive_diplomacy_module
+#        contact_rule = on_action_only  通讯完全由脚本 on_action 驱动
+# ============================================================================
+
+zl_deepseek = {
+	show_in_contacts_list = yes
+	minimalist_contacts_list_profile = yes
+	share_communications = no
+	default_ships = no
+	government = no
+	uses_origins = no
+
+	ai = {
+		enabled = no
+	}
+
+	faction = {
+		hostile = no
+		needs_border_access = no
+		generate_borders = no
+		needs_colony = no
+		auto_delete = no
+	}
+
+	# 外交菜单来自我们自己的事件（复刻灰风的 custom_diplomacy）
+	custom_diplomacy = yes
+
+	modules = {
+		basic_technology_module = {}
+		exclusive_diplomacy_module = {
+			contact_rule = on_action_only
+		}
+	}
+}
