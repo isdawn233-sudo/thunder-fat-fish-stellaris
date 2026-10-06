@@ -31,7 +31,7 @@ SOFTWARE.
     common/    events/    gfx/portraits/portraits/    interface/
     localisation/    tools/    以及各 .md 文档
 
-【例外】角色立绘不适用 MIT 许可：
+【例外一】角色立绘不适用 MIT 许可：
 
     gfx/models/portraits/zl_leader/zl_unique_administrator_leader.dds
     thumbnail.png
@@ -43,6 +43,20 @@ SOFTWARE.
 转载或再分发本 mod 时，请自行评估该立绘的合规性；
 若你是权利人并希望移除，请在本仓库提交 Issue。
 
+【例外二】鲸鱼图形属于 DeepSeek 官方品牌素材，不适用 MIT 许可：
+
+    flags/special/zl_deepseek.dds
+    flags/special/map/zl_deepseek.dds
+    flags/special/small/zl_deepseek.dds
+
+该图形取自 DeepSeek 官方品牌素材，其使用受
+《DeepSeek 品牌素材使用规范》约束：
+    https://github.com/deepseek-ai/awesome-deepseek-integration/blob/main/docs/logo-svg/guidelines.md
+
+本 mod 与 DeepSeek 官方没有任何关联，是非商业的粉丝作品，
+不包含也不调用 DeepSeek 的任何模型或 API。
+若 DeepSeek 官方认为使用方式不妥，请提交 Issue，作者会立即移除。
+
 【English】
 
 The MIT license above applies to the parts of this repository created by the
@@ -51,7 +65,7 @@ project author:
     common/    events/    gfx/portraits/portraits/    interface/
     localisation/    tools/    and the .md documents
 
-EXCEPTION — the character portrait is NOT covered by the MIT license:
+EXCEPTION 1 — the character portrait is NOT covered by the MIT license:
 
     gfx/models/portraits/zl_leader/zl_unique_administrator_leader.dds
     thumbnail.png
@@ -64,3 +78,19 @@ MIT license above.
 
 If you redistribute this mod, evaluate that asset's compliance yourself.
 If you are the rights holder and want it removed, please open an Issue.
+
+EXCEPTION 2 — the whale graphic is DeepSeek official brand material and is
+NOT covered by the MIT license:
+
+    flags/special/zl_deepseek.dds
+    flags/special/map/zl_deepseek.dds
+    flags/special/small/zl_deepseek.dds
+
+It is taken from DeepSeek's official brand assets and its use is governed by
+the DeepSeek Brand Asset Usage Guidelines:
+    https://github.com/deepseek-ai/awesome-deepseek-integration/blob/main/docs/logo-svg/guidelines.md
+
+This mod is not affiliated with DeepSeek in any way. It is a non-commercial
+fan project and contains no DeepSeek models or API calls.
+If DeepSeek considers this use inappropriate, please open an Issue and the
+author will remove the asset immediately.

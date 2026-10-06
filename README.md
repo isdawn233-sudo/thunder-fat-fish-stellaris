@@ -22,6 +22,7 @@
 - [已知的技术坑](#已知的技术坑)
 - [素材来源与署名](#素材来源与署名)
 - [许可证](#许可证)
+- [关于 DeepSeek 的声明](#关于-deepseek-的声明)
 
 ---
 
@@ -468,16 +469,14 @@ effect = { hidden_effect = { owner = { country_event = { id = ... } } } }
 
 | 素材 | 来源 | 授权 |
 |---|---|---|
-| 鲸鱼标志（用于帝国旗帜） | 取自项目图标 | 图形化标志，仅作指代用途 |
+| 鲸鱼图形（用于帝国旗帜） | [DeepSeek 官方品牌素材](https://github.com/deepseek-ai/awesome-deepseek-integration/blob/main/docs/logo-svg/guidelines.md) | 受官方使用规范约束，非商业粉丝用途；详见[关于 DeepSeek 的声明](#关于-deepseek-的声明) |
 | 原版游戏贴图（子职业图标等） | Paradox Interactive | Stellaris 游戏资源，未随本仓库分发 |
 
 ---
 
 ## 许可证
 
-本项目采用 **[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)**
-（署名-非商业性使用-相同方式共享 4.0 国际）许可协议，
-完整条款见 [LICENSE](LICENSE)。
+本项目的**代码部分**采用 **MIT License**，完整条款见 [LICENSE](LICENSE)。
 
 ```
 SPDX-License-Identifier: MIT
@@ -487,7 +486,7 @@ SPDX-License-Identifier: MIT
 `common/` `events/` `gfx/portraits/portraits/` `interface/` `localisation/`
 `tools/` 以及各 `.md` 文档。
 
-**例外 —— 角色立绘不在 MIT 覆盖范围内**：
+**例外一 —— 角色立绘不在 MIT 覆盖范围内**：
 
 ```
 gfx/models/portraits/zl_leader/zl_unique_administrator_leader.dds
@@ -495,15 +494,52 @@ thumbnail.png
 ```
 
 该立绘是从网上搜集的 AI 生成图片，本项目作者并非其创作者，也未取得明示
-授权，权利状态不明。详见 [素材来源与署名](#素材来源与署名)。
+授权，权利状态不明。
+
+**例外二 —— 鲸鱼图形属于 DeepSeek 官方品牌素材**：
+
+```
+flags/special/zl_deepseek.dds
+flags/special/map/zl_deepseek.dds
+flags/special/small/zl_deepseek.dds
+```
+
+该图形取自 DeepSeek 官方品牌素材，其使用受官方规范约束（见下节），
+**不在 MIT 许可范围内**。
 
 | | 说明 |
 |---|---|
 | ✅ **代码部分** | MIT —— 自由使用、修改、再分发，甚至商用 |
-| ⚠️ **立绘** | 权利状态不明，**不在 MIT 范围内**；再分发时请自行评估 |
+| ⚠️ **角色立绘** | 权利状态不明，**不在 MIT 范围内**；再分发时请自行评估 |
+| ⚠️ **鲸鱼图形** | DeepSeek 官方品牌素材，受其使用规范约束 |
 
-如果你打算以宽松协议复用本仓库的代码，建议**先移除立绘相关文件**
-（`gfx/models/portraits/`、`thumbnail.png`），就可以完全按 MIT 处理。
+如果你打算以宽松协议复用本仓库的代码，建议**先移除上述两类素材文件**，
+就可以完全按 MIT 处理。
+
+---
+
+## 关于 DeepSeek 的声明
+
+**本 mod 是一个非商业的粉丝作品，与 DeepSeek 官方没有任何关联。**
+
+- 本 mod **不是** DeepSeek 官方产品，也**未获得** DeepSeek 官方的赞助、
+  授权或背书
+- 本 mod **不包含、不调用、也不依赖** DeepSeek 的任何模型或 API；
+  「DeepSeek」在本 mod 中仅作为**虚构角色的名字**出现
+- 帝国旗帜使用的鲸鱼图形取自 **DeepSeek 官方品牌素材**，
+  依据其公开的
+  [DeepSeek 品牌素材使用规范](https://github.com/deepseek-ai/awesome-deepseek-integration/blob/main/docs/logo-svg/guidelines.md)
+  使用
+- 使用目的为**非商业的粉丝致敬**，不涉及任何形式的销售、付费墙或商业推广
+- 本 mod 完全免费，作者不从中获取任何商业利益
+
+> ⚠️ **规范中明确要求"请在实际接入 DeepSeek 的模型或 API 的前提下使用"**，
+> 而本 mod 是游戏模组，并不满足该前提。因此本 mod 对鲸鱼图形的使用属于
+> **灰色地带** —— 作者已尽量做到明确声明、非商业使用、可随时移除。
+>
+> **若 DeepSeek 官方认为本 mod 的使用方式不妥，请提交 Issue，
+> 作者会立即移除相关图形。**
+
 
 ---
 
