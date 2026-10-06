@@ -158,7 +158,7 @@ Stellaris 的 mod 采用**「一个文件夹 + 一个同名 .mod 文件」**的�
 |---|---|---|
 | `descriptor.mod` 里有 `name` | 必须 | ✅ |
 | `picture="thumbnail.png"` | 必须，且名字固定 | ✅ |
-| `thumbnail.png` | PNG、≥512×512、**< 1 MB** | ✅ 512×512、454 KB |
+| `thumbnail.png` | PNG、≥512×512、**< 1 MB** | ✅ 512×512、155 KB |
 | `descriptor.mod` 里有 `path=` | **不需要**（会被忽略） | ✅ 已移除 |
 | `tags` | ≤ 10 个（建议用预定义标签） | ✅ 4 个 |
 | 所有文件编码 | 见上方表格 | ✅ 已用 `tools/fix_bom.py` 校验 |
