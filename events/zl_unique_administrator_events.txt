@@ -210,21 +210,9 @@ country_event = {
 			species = root.owner_main_species
 			name = "NAME_zl_administrator"
 			gender = indeterminable
-			# ★ 建在 1 级，随后在 effect 里逐个挂特质，最后补到 10 级。
-			#
-			#   两条互相冲突的规则要同时满足：
-			#     (a) 原版 caps（00_defines.txt）：
-			#             MAX_BASIC_TRAITS = 2 / MAX_VETERAN_TRAITS = 3
-			#             destiny 1 / subclass 1
-			#         【超限会在任命内阁时被清理】—— 超出的特质被移除，
-			#         并且重新弹出"请选择特质"（实测踩过）。
-			#     (b) LEADER_TRAIT_SELECTION_LEVELS = { 1..10 }
-			#         → 10 级要消耗 10 次选择。
-			#
-			#   所以配装只给 7 个（守上限），
-			#   再用 add_skill_without_trait_selection 直接补到 10 级，
-			#   绕开"每级一次选择"的流程。
-			skill = 1
+			# ★ skill 直接用 10，与灰风一致（gray_goo_effects.txt 的
+			#   create_gray_official 就是 skill = 10 + traits 块）。
+			skill = 10
 			event_leader = yes
 			skip_background_generation = yes
 			randomize_traits = no
@@ -241,26 +229,37 @@ country_event = {
 				set_leader_flag = leader_death_events_blocked
 				set_leader_flag = immune_to_negative_traits
 				set_immortal = yes
+				# ★★★ 关键：压制"待选特质" ★★★
+				#
+				#  原版全游戏只有一处用到这个 flag ——
+				#  common/scripted_effects/gray_goo_effects.txt:937
+				#  的 create_gray_official：
+				#
+				#      last_created_leader = {
+				#          save_global_event_target_as = gray_official
+				#          set_leader_flag = has_gained_level_trait
+				#      }
+				#
+				#  灰风是 skill = 10 却只配 4 个特质，
+				#  正因为设了这个 flag，UI 才不会提示"请选择特质"。
+				#  这就是"已经拿过升级特质"的开关。
+				set_leader_flag = has_gained_level_trait
 				log = "ZLDBG: [99] STEP 8/9 - flags/immortal/portrait set"
 				# 自定义静态半身立绘
 				change_leader_portrait = zl_administrator
 				log = "ZLDBG: [99] STEP 8b/9 - portrait changed, adding traits"
 
 				# ==========================================================
-				#  ★ 初始"行政官形态"配装 —— 正好 10 个
-				#  与 zl_switch_form_administrator 完全一致：
+				#  ★ 初始"行政官形态"配装 —— 与切换效果完全一致
 				#      subclass 4 + basic 2 + veteran 3 + destiny 1 = 10
 				#
-				#  为什么必须正好 10 个：
-				#      LEADER_TRAIT_SELECTION_LEVELS = { 1..10 }
-				#      → 10 级要消耗 10 次选择；
-				#      而 add_skill_without_trait_selection 只加等级、
-				#      不消耗选择机会。所以特质总数必须等于等级，
-				#      否则 UI 会一直弹"等级提升！请选择特质"。
+				#  真正让 UI 不再提示"请选择特质"的是上面那句
+				#      set_leader_flag = has_gained_level_trait
+				#  （照抄原版灰风的 create_gray_official）。
 				#
-				#  subclass 在 defines 里没有上限，且不占 basic/veteran/destiny
-				#  额度，所以用 4 个原版子职业把数量补到 10，
-				#  同时不触发任何超限清理。
+				#  subclass 在 defines 里没有上限，且不占
+				#  basic/veteran/destiny 额度，所以用 4 个原版子职业
+				#  把数量补到 10，同时不触发任何超限清理。
 				# ==========================================================
 				# subclass ×4
 				add_trait = { trait = subclass_official_governor               consume_selection = yes }
@@ -278,11 +277,9 @@ country_event = {
 				add_trait = { trait = zl_leader_trait_administrator            consume_selection = yes }
 				log = "ZLDBG: [99] STEP 8c/9 - traits added"
 
-				# ★ 补到 10 级。
-				#   不用逐级触发选择：add_skill_without_trait_selection
-				#   直接加等级且不弹特质选择。
-				add_skill_without_trait_selection = 9
-				log = "ZLDBG: [99] STEP 9/9 - DONE, skill set to 10"
+				# 等级已在 create_leader 里直接给到 10（与灰风一致），
+				# 不再需要补级。
+				log = "ZLDBG: [99] STEP 9/9 - DONE"
 			}
 		}
 	}

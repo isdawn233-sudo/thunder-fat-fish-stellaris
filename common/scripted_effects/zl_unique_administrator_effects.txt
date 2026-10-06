@@ -108,6 +108,10 @@ zl_switch_form_administrator = {
 		# destiny ×1（本 mod 形态特质，不朽）
 		add_trait = { trait = zl_leader_trait_administrator            consume_selection = yes }
 
+		# ★ 压制"待选特质"（与灰风同款写法）
+		#  原版唯一用处：gray_goo_effects.txt:937 的 create_gray_official
+		set_leader_flag = has_gained_level_trait
+
 		set_leader_flag = zl_form_administrator
 	}
 }
@@ -132,6 +136,8 @@ zl_switch_form_commander = {
 		add_trait = { trait = leader_trait_legendary_military_knowledge_3    consume_selection = yes }
 		add_trait = { trait = zl_leader_trait_commander                consume_selection = yes }
 
+		set_leader_flag = has_gained_level_trait
+
 		set_leader_flag = zl_form_commander
 	}
 }
@@ -155,6 +161,8 @@ zl_switch_form_scientist = {
 		add_trait = { trait = leader_trait_legendary_scientific_diplomacy_3  consume_selection = yes }
 		add_trait = { trait = leader_trait_legendary_military_knowledge_3    consume_selection = yes }
 		add_trait = { trait = zl_leader_trait_scientist                consume_selection = yes }
+
+		set_leader_flag = has_gained_level_trait
 
 		set_leader_flag = zl_form_scientist
 	}
