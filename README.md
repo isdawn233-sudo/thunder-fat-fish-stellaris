@@ -429,6 +429,10 @@ effect = { hidden_effect = { owner = { country_event = { id = ... } } } }
 
 ## 素材来源与署名
 
+> 📄 **完整声明见 [`ASSET-NOTICE.md`](ASSET-NOTICE.md)** ——
+> 该文件逐项说明每份素材的来源、权利状态、本项目所做的修改，
+> 以及权利人的移除请求渠道。本节是其摘要。
+
 ### 角色立绘
 
 | 项目 | 内容 |
@@ -477,6 +481,7 @@ effect = { hidden_effect = { owner = { country_event = { id = ... } } } }
 ## 许可证
 
 本项目的**代码部分**采用 **MIT License**，完整条款见 [LICENSE](LICENSE)。
+**非代码素材的完整权利说明见 [ASSET-NOTICE.md](ASSET-NOTICE.md)。**
 
 ```
 SPDX-License-Identifier: MIT
